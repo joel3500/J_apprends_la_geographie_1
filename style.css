@@ -1,0 +1,414 @@
+/* J'explore le monde — jeu éducatif de géographie (3-6 ans) */
+
+:root{
+  --clr-europe:#6C9BCF;
+  --clr-afrique:#F2A65A;
+  --clr-asie:#E85D75;
+  --clr-amerique:#7FB77E;
+  --clr-oceanie:#F4B942;
+  --clr-antarctique:#8FC7DE;
+  --clr-text:#233042;
+  --clr-muted:#5b6b80;
+  --clr-card:#ffffff;
+  --shadow-soft:0 10px 26px rgba(20,40,70,.12);
+  --shadow-hover:0 14px 34px rgba(20,40,70,.20);
+  --radius-lg:28px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-family:"Baloo 2","Comic Sans MS","Segoe UI",system-ui,sans-serif;
+  color:var(--clr-text);
+  background:
+    radial-gradient(circle at 15% 10%, #FFFDF5 0%, transparent 45%),
+    linear-gradient(180deg, #BEE7FF 0%, #E9F7EC 55%, #FDF6E3 100%);
+  overflow-x:hidden;
+}
+
+/* navigation entre les 3 tranches d'âge */
+.page-nav{
+  display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center;
+  padding:16px 12px 0;
+  width:100%;
+}
+.page-nav a{
+  color:#1b3a5c;
+  text-decoration:none;
+  font-size:.9rem;
+  font-weight:700;
+  padding:.5em 1.15em;
+  border-radius:999px;
+  background:rgba(255,255,255,.7);
+  box-shadow:var(--shadow-soft);
+  transition:background .15s ease, transform .15s ease;
+}
+.page-nav a:hover{ background:#fff; transform:translateY(-1px); }
+.page-nav a[aria-current="page"]{
+  background:linear-gradient(135deg,#6C9BCF,#4b7fc7);
+  color:#fff;
+}
+
+header.hero{
+  width:100%;
+  text-align:center;
+  padding:34px 16px 10px;
+}
+h1{
+  font-size:clamp(1.9rem, 6vw, 3.2rem);
+  margin:0 0 6px;
+  font-weight:800;
+  letter-spacing:.5px;
+  color:#1b3a5c;
+  text-shadow:2px 2px 0 rgba(255,255,255,.6);
+}
+.tagline{
+  margin:0 auto 14px;
+  max-width:560px;
+  font-size:clamp(1rem, 2.6vw, 1.2rem);
+  color:var(--clr-muted);
+  font-weight:600;
+}
+
+/* barre de progression en étoiles */
+.progress{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin:6px 0 18px;
+  font-weight:700;
+  color:#1b3a5c;
+}
+.progress .stars{ font-size:1.4rem; letter-spacing:2px; }
+.progress .count{
+  background:#fff;
+  padding:.35em .9em;
+  border-radius:999px;
+  box-shadow:var(--shadow-soft);
+  font-size:1rem;
+}
+
+/* zone de jeu */
+main{
+  width:min(94vw, 760px);
+  margin:0 auto 30px;
+  position:relative;
+}
+
+.map-wrap{
+  position:relative;
+  background:linear-gradient(180deg, #cdeeff 0%, #eaf8ff 100%);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:10px;
+}
+
+.continent{
+  cursor:pointer;
+  transition:transform .18s ease, filter .18s ease;
+  transform-origin:center;
+}
+.continent:hover, .continent:focus-visible{
+  transform:translateY(-4px) scale(1.03);
+  filter:brightness(1.06);
+  outline:none;
+}
+.continent.found{
+  filter:saturate(1.15);
+}
+.continent .emoji-badge{
+  font-size:34px;
+  pointer-events:none;
+  user-select:none;
+}
+.continent .label{
+  font-size:14px;
+  font-weight:800;
+  fill:#1b3a5c;
+  pointer-events:none;
+  user-select:none;
+}
+.star-pop{
+  font-size:20px;
+  pointer-events:none;
+  opacity:0;
+}
+
+/* carte de découverte (modale) */
+.overlay{
+  position:fixed; inset:0;
+  background:rgba(20,35,55,.45);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  z-index:50;
+  opacity:0; pointer-events:none;
+  transition:opacity .2s ease;
+}
+.overlay.open{ opacity:1; pointer-events:auto; }
+
+.card{
+  background:var(--clr-card);
+  border-radius:26px;
+  max-width:420px;
+  width:100%;
+  padding:28px 24px 22px;
+  text-align:center;
+  box-shadow:var(--shadow-hover);
+  transform:scale(.85);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.overlay.open .card{ transform:scale(1); }
+
+.card .big-emoji{ font-size:64px; display:block; margin-bottom:6px; }
+.card h2{ margin:0 0 6px; font-size:1.6rem; color:#1b3a5c; }
+.card p.fact{ font-size:1.05rem; color:var(--clr-text); margin:0 0 18px; line-height:1.4; }
+
+.btn-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+button.pill{
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  font-weight:700;
+  font-size:1rem;
+  padding:.7em 1.4em;
+  border-radius:999px;
+  background:#eef3f9;
+  color:#1b3a5c;
+  box-shadow:var(--shadow-soft);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+button.pill:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
+button.pill.primary{
+  background:linear-gradient(135deg,#6C9BCF,#4b7fc7);
+  color:#fff;
+}
+button.pill.listen{
+  background:linear-gradient(135deg,#F4B942,#F2A65A);
+  color:#3a2a08;
+}
+
+/* écran de victoire */
+.win-banner{
+  display:none;
+  width:min(94vw, 640px);
+  margin:0 auto 30px;
+  background:#fff;
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:26px 20px;
+  text-align:center;
+}
+.win-banner.show{ display:block; animation:pop-in .35s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pop-in{ from{ transform:scale(.8); opacity:0; } to{ transform:scale(1); opacity:1; } }
+.win-banner h2{ margin:0 0 8px; font-size:1.6rem; color:#1b3a5c; }
+.win-banner p{ margin:0 0 16px; color:var(--clr-muted); font-weight:600; }
+
+footer{
+  margin-top:auto;
+  padding:18px 16px 26px;
+  text-align:center;
+  color:var(--clr-muted);
+  font-size:.85rem;
+  max-width:640px;
+}
+
+/* confettis */
+.confetti{
+  position:fixed;
+  top:-20px;
+  width:10px; height:10px;
+  border-radius:2px;
+  opacity:.9;
+  z-index:60;
+  pointer-events:none;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+
+@media (max-width:480px){
+  .continent .emoji-badge{ font-size:28px; }
+  .continent .label{ font-size:11px; }
+}
+
+/* ================= QUIZ (7-10 et 11-14 ans) ================= */
+
+.quiz-wrap{
+  width:min(94vw, 640px);
+  margin:0 auto 30px;
+  background:#fff;
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:26px 22px 24px;
+}
+
+.quiz-topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.quiz-stat{
+  background:#eef3f9;
+  color:#1b3a5c;
+  font-weight:700;
+  font-size:.9rem;
+  padding:.4em 1em;
+  border-radius:999px;
+}
+
+.progress-bar-track{
+  width:100%;
+  height:10px;
+  background:#e7edf5;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:22px;
+}
+.progress-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,#6C9BCF,#7FB77E);
+  border-radius:999px;
+  transition:width .35s ease;
+}
+
+.question-eyebrow{
+  font-size:.8rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--clr-muted);
+  margin:0 0 6px;
+}
+.question-text{
+  font-size:clamp(1.15rem, 3.4vw, 1.5rem);
+  font-weight:800;
+  color:#1b3a5c;
+  margin:0 0 20px;
+  line-height:1.35;
+}
+.question-flag{ font-size:3rem; margin:0 0 10px; display:block; }
+
+.choices{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:8px;
+}
+@media (max-width:480px){ .choices{ grid-template-columns:1fr; } }
+
+.choice-btn{
+  border:2px solid #e7edf5;
+  background:#fbfcfe;
+  color:var(--clr-text);
+  font-family:inherit;
+  font-weight:700;
+  font-size:1rem;
+  padding:.85em 1em;
+  border-radius:16px;
+  cursor:pointer;
+  text-align:left;
+  transition:transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.choice-btn:hover:not(:disabled){ transform:translateY(-2px); border-color:#c7d7ec; }
+.choice-btn:disabled{ cursor:default; }
+.choice-btn.correct{ background:#e3f5e6; border-color:#7FB77E; }
+.choice-btn.wrong{ background:#fbe6e9; border-color:#E85D75; }
+.choice-btn.reveal{ background:#e3f5e6; border-color:#7FB77E; }
+
+.feedback-msg{
+  min-height:1.4em;
+  font-weight:800;
+  margin:10px 0 4px;
+  text-align:center;
+}
+.feedback-msg.ok{ color:#3d8b52; }
+.feedback-msg.no{ color:#c94860; }
+
+.quiz-actions{
+  display:flex;
+  justify-content:center;
+  margin-top:6px;
+}
+
+.result-screen{ text-align:center; }
+.result-badge{ font-size:4rem; display:block; margin-bottom:6px; }
+.result-score{
+  font-size:clamp(1.6rem, 5vw, 2.2rem);
+  font-weight:800;
+  color:#1b3a5c;
+  margin:0 0 4px;
+}
+.result-best{
+  font-size:.95rem;
+  color:var(--clr-muted);
+  font-weight:600;
+  margin:0 0 20px;
+}
+.result-msg{ font-size:1.05rem; margin:0 0 22px; color:var(--clr-text); }
+
+/* menu de difficulté / accueil du quiz */
+.mode-select{ text-align:center; }
+.mode-select p.intro{ color:var(--clr-muted); font-weight:600; margin:0 0 20px; }
+.mode-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin-bottom:8px;
+}
+.mode-card{
+  border:2px solid #e7edf5;
+  background:#fbfcfe;
+  border-radius:18px;
+  padding:16px 10px;
+  cursor:pointer;
+  font-family:inherit;
+  text-align:center;
+  transition:transform .12s ease, border-color .12s ease;
+}
+.mode-card:hover{ transform:translateY(-3px); border-color:#c7d7ec; }
+.mode-card .m-emoji{ font-size:1.8rem; display:block; margin-bottom:4px; }
+.mode-card .m-title{ font-weight:800; color:#1b3a5c; display:block; }
+.mode-card .m-sub{ font-size:.8rem; color:var(--clr-muted); }
+
+/* cartes d'accueil (index.html) */
+.age-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+  width:min(94vw,900px);
+  margin:10px auto 30px;
+}
+.age-card{
+  background:#fff;
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:26px 20px;
+  text-align:center;
+  text-decoration:none;
+  color:var(--clr-text);
+  transition:transform .15s ease, box-shadow .15s ease;
+  display:block;
+}
+.age-card:hover{ transform:translateY(-5px); box-shadow:var(--shadow-hover); }
+.age-card .a-emoji{ font-size:3rem; display:block; margin-bottom:8px; }
+.age-card h2{ margin:0 0 6px; font-size:1.3rem; color:#1b3a5c; }
+.age-card .a-age{
+  display:inline-block;
+  background:#eef3f9;
+  color:#1b3a5c;
+  font-weight:700;
+  font-size:.8rem;
+  padding:.25em .8em;
+  border-radius:999px;
+  margin-bottom:10px;
+}
+.age-card p{ margin:0; font-size:.9rem; color:var(--clr-muted); line-height:1.4; }

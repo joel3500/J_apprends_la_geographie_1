@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>J'explore le monde — jeu éducatif de géographie (dès 3 ans)</title>
+<meta name="description" content="Jeu éducatif gratuit pour découvrir les continents en s'amusant, dès 3 ans. Clique sur chaque continent, écoute son nom et découvre l'animal qui y vit !" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="J'explore le monde — les continents" />
+<meta property="og:description" content="Jeu éducatif gratuit pour découvrir les continents en s'amusant, dès 3 ans." />
+<link rel="canonical" href="https://joel3500.github.io/japprends_la_geographie/geo_3_6.html" />
+<link rel="stylesheet" href="style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "J'explore le monde",
+  "description": "Jeu éducatif gratuit pour découvrir les continents et leurs animaux en s'amusant, dès 3 ans.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (navigateur web)",
+  "inLanguage": ["fr"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 3 },
+  "author": { "@type": "Person", "name": "Joel Sandé" }
+}
+</script>
+</head>
+<body>
+
+<nav class="page-nav" aria-label="Choisir une tranche d'âge">
+  <a href="index.html">🏠 Accueil</a>
+  <a href="geo_3_6.html" aria-current="page">🐣 3-6 ans</a>
+  <a href="geo_7_10.html">🧭 7-10 ans</a>
+  <a href="geo_11_14.html">🌐 11-14 ans</a>
+</nav>
+
+<header class="hero">
+  <h1>🌍 J'explore le monde</h1>
+  <p class="tagline">Clique sur chaque continent pour découvrir son nom et l'ami animal qui y habite !</p>
+  <div class="progress">
+    <span class="stars" id="starsRow">☆☆☆☆☆☆</span>
+    <span class="count"><span id="foundCount">0</span> / 6 continents trouvés</span>
+  </div>
+</header>
+
+<main>
+  <div class="map-wrap">
+    <svg viewBox="0 0 650 460" width="100%" role="img" aria-label="Carte du monde à explorer">
+
+      <g class="continent" tabindex="0" data-id="amerique" role="button" aria-label="Amérique">
+        <path d="M 60 60 C 20 90, 10 150, 30 200 C 10 250, 20 300, 60 340 C 100 380, 150 370, 175 330 C 200 290, 180 250, 195 210 C 210 170, 190 130, 175 90 C 160 50, 100 30, 60 60 Z" fill="var(--clr-amerique)"/>
+        <text x="102" y="150" text-anchor="middle" class="emoji-badge-text" font-size="34">🦅</text>
+        <text x="102" y="215" text-anchor="middle" class="label">Amérique</text>
+      </g>
+
+      <g class="continent" tabindex="0" data-id="europe" role="button" aria-label="Europe">
+        <path d="M 250 60 C 230 50, 210 70, 215 95 C 210 120, 230 140, 260 145 C 290 150, 320 135, 325 105 C 330 75, 300 55, 250 60 Z" fill="var(--clr-europe)"/>
+        <text x="270" y="100" text-anchor="middle" font-size="30">🦊</text>
+        <text x="270" y="128" text-anchor="middle" class="label">Europe</text>
+      </g>
+
+      <g class="continent" tabindex="0" data-id="afrique" role="button" aria-label="Afrique">
+        <path d="M 255 160 C 220 170, 210 220, 225 260 C 210 300, 230 340, 270 350 C 310 360, 340 330, 345 290 C 350 250, 335 210, 340 175 C 345 140, 300 145, 255 160 Z" fill="var(--clr-afrique)"/>
+        <text x="285" y="250" text-anchor="middle" font-size="32">🦁</text>
+        <text x="285" y="280" text-anchor="middle" class="label">Afrique</text>
+      </g>
+
+      <g class="continent" tabindex="0" data-id="asie" role="button" aria-label="Asie">
+        <path d="M 380 70 C 350 90, 340 140, 360 175 C 340 210, 350 250, 390 265 C 440 285, 500 270, 540 240 C 580 210, 590 160, 560 120 C 530 80, 460 50, 380 70 Z" fill="var(--clr-asie)"/>
+        <text x="460" y="165" text-anchor="middle" font-size="32">🐼</text>
+        <text x="460" y="195" text-anchor="middle" class="label">Asie</text>
+      </g>
+
+      <g class="continent" tabindex="0" data-id="oceanie" role="button" aria-label="Océanie">
+        <path d="M 500 300 C 480 300, 465 320, 475 345 C 465 370, 490 390, 520 385 C 550 380, 565 355, 555 330 C 545 305, 525 300, 500 300 Z" fill="var(--clr-oceanie)"/>
+        <text x="515" y="345" text-anchor="middle" font-size="26">🦘</text>
+        <text x="515" y="368" text-anchor="middle" class="label" font-size="12">Océanie</text>
+      </g>
+
+      <g class="continent" tabindex="0" data-id="antarctique" role="button" aria-label="Antarctique">
+        <path d="M 60 400 C 150 385, 300 395, 400 390 C 480 386, 560 395, 610 405 C 560 430, 400 435, 250 432 C 150 430, 80 425, 60 400 Z" fill="var(--clr-antarctique)"/>
+        <text x="330" y="412" text-anchor="middle" font-size="24">🐧</text>
+        <text x="330" y="422" text-anchor="middle" class="label" font-size="11" dy="14">Antarctique</text>
+      </g>
+
+    </svg>
+  </div>
+</main>
+
+<div class="win-banner" id="winBanner">
+  <h2>🎉 Bravo, explorateur·rice !</h2>
+  <p>Tu as trouvé les 6 continents du monde !</p>
+  <button class="pill primary" id="replayBtn">🔄 Rejouer</button>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="card">
+    <span class="big-emoji" id="cardEmoji">🌍</span>
+    <h2 id="cardTitle">Continent</h2>
+    <p class="fact" id="cardFact">Fait amusant ici.</p>
+    <div class="btn-row">
+      <button class="pill listen" id="listenBtn">🔊 Écouter</button>
+      <button class="pill primary" id="closeBtn">Continuer</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; J'explore le monde — à but éducatif, dès 3 ans. Maternelle, garderie, jeunesse.<br>
+            Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean <br>
+            Merci de partager massivement !</p>
+</footer>
+
+<script>
+const DATA = {
+  amerique:   { name: "Amérique",   emoji: "🦅", fact: "En Amérique, le grand aigle plane très haut dans le ciel !" },
+  europe:     { name: "Europe",     emoji: "🦊", fact: "En Europe, le petit renard vit dans les forêts près des vieux châteaux." },
+  afrique:    { name: "Afrique",    emoji: "🦁", fact: "En Afrique, le lion est le roi de la savane !" },
+  asie:       { name: "Asie",       emoji: "🐼", fact: "En Asie, le panda mange du bambou toute la journée." },
+  oceanie:    { name: "Océanie",    emoji: "🦘", fact: "En Océanie, le kangourou saute très très haut !" },
+  antarctique:{ name: "Antarctique",emoji: "🐧", fact: "En Antarctique, il fait très froid et le manchot adore ça !" }
+};
+
+const found = new Set();
+const overlay = document.getElementById('overlay');
+const cardEmoji = document.getElementById('cardEmoji');
+const cardTitle = document.getElementById('cardTitle');
+const cardFact = document.getElementById('cardFact');
+const listenBtn = document.getElementById('listenBtn');
+const closeBtn = document.getElementById('closeBtn');
+const foundCountEl = document.getElementById('foundCount');
+const starsRow = document.getElementById('starsRow');
+const winBanner = document.getElementById('winBanner');
+const replayBtn = document.getElementById('replayBtn');
+
+let currentId = null;
+const supportsSpeech = 'speechSynthesis' in window;
+if (!supportsSpeech) listenBtn.style.display = 'none';
+
+function openCard(id){
+  currentId = id;
+  const d = DATA[id];
+  cardEmoji.textContent = d.emoji;
+  cardTitle.textContent = d.name;
+  cardFact.textContent = d.fact;
+  overlay.classList.add('open');
+
+  if (!found.has(id)){
+    found.add(id);
+    document.querySelector('.continent[data-id="'+id+'"]').classList.add('found');
+    updateProgress();
+  }
+}
+
+function closeCard(){
+  overlay.classList.remove('open');
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  if (found.size === 6) setTimeout(celebrate, 250);
+}
+
+function updateProgress(){
+  foundCountEl.textContent = found.size;
+  let stars = '';
+  for (let i=0;i<6;i++) stars += (i < found.size ? '★' : '☆');
+  starsRow.textContent = stars;
+}
+
+function speak(){
+  if (!supportsSpeech || !currentId) return;
+  window.speechSynthesis.cancel();
+  const d = DATA[currentId];
+  const u = new SpeechSynthesisUtterance(d.name + '. ' + d.fact);
+  u.lang = 'fr-FR';
+  u.rate = 0.95;
+  window.speechSynthesis.speak(u);
+}
+
+function celebrate(){
+  winBanner.classList.add('show');
+  const colors = ['#6C9BCF','#F2A65A','#E85D75','#7FB77E','#F4B942','#8FC7DE'];
+  for (let i=0;i<60;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animation = 'fall ' + (2.2 + Math.random()*1.6) + 's linear forwards';
+    c.style.transform = 'rotate(' + Math.floor(Math.random()*360) + 'deg)';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4200);
+  }
+}
+
+function resetGame(){
+  found.clear();
+  document.querySelectorAll('.continent').forEach(el => el.classList.remove('found'));
+  updateProgress();
+  winBanner.classList.remove('show');
+}
+
+document.querySelectorAll('.continent').forEach(el => {
+  el.addEventListener('click', () => openCard(el.dataset.id));
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openCard(el.dataset.id); }
+  });
+});
+
+listenBtn.addEventListener('click', speak);
+closeBtn.addEventListener('click', closeCard);
+replayBtn.addEventListener('click', resetGame);
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCard(); });
+
+// injecte l'animation de chute des confettis
+const styleTag = document.createElement('style');
+styleTag.textContent = '@keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity:.3; } }';
+document.head.appendChild(styleTag);
+</script>
+
+</body>
+</html>

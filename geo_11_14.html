@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Défi géo mondial — géographie 11-14 ans</title>
+<meta name="description" content="Défi éducatif gratuit mêlant capitales, vrai ou faux et monuments du monde, pour les 11-14 ans. Score, série de bonnes réponses et badges à débloquer." />
+<link rel="canonical" href="https://joel3500.github.io/japprends_la_geographie/geo_11_14.html" />
+<link rel="stylesheet" href="style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Défi géo mondial",
+  "description": "Défi éducatif gratuit mêlant capitales, vrai ou faux et monuments du monde, dès 11 ans.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (navigateur web)",
+  "inLanguage": ["fr"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 11 },
+  "author": { "@type": "Person", "name": "Joel Sandé" }
+}
+</script>
+</head>
+<body>
+
+<nav class="page-nav" aria-label="Choisir une tranche d'âge">
+  <a href="index.html">🏠 Accueil</a>
+  <a href="geo_3_6.html">🐣 3-6 ans</a>
+  <a href="geo_7_10.html">🧭 7-10 ans</a>
+  <a href="geo_11_14.html" aria-current="page">🌐 11-14 ans</a>
+</nav>
+
+<header class="hero">
+  <h1>🌐 Défi géo mondial</h1>
+  <p class="tagline">Capitales, vrai ou faux, monuments célèbres : un défi complet pour tester ta culture géo !</p>
+</header>
+
+<main>
+  <div class="quiz-wrap">
+
+    <div class="mode-select" id="modeSelect">
+      <p class="intro">Choisis la longueur du défi :</p>
+      <div class="mode-grid">
+        <button class="mode-card" data-len="8">
+          <span class="m-emoji">⚡</span>
+          <span class="m-title">Rapide</span>
+          <span class="m-sub">8 questions</span>
+        </button>
+        <button class="mode-card" data-len="12">
+          <span class="m-emoji">🌐</span>
+          <span class="m-title">Complet</span>
+          <span class="m-sub">12 questions</span>
+        </button>
+        <button class="mode-card" data-len="16">
+          <span class="m-emoji">🏔️</span>
+          <span class="m-title">Expert</span>
+          <span class="m-sub">16 questions</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="quizScreen" style="display:none;">
+      <div class="quiz-topbar">
+        <span class="quiz-stat">⭐ Score : <span id="scoreVal">0</span></span>
+        <span class="quiz-stat">🔥 Série : <span id="streakVal">0</span></span>
+        <span class="quiz-stat">⏱️ <span id="timerVal">0</span> s</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+
+      <p class="question-eyebrow" id="qType">Question <span id="qIndex">1</span> / <span id="qTotal">12</span></p>
+      <span class="question-flag" id="qEmoji">🌍</span>
+      <p class="question-text" id="qText">…</p>
+
+      <div class="choices" id="choicesRow"></div>
+      <p class="feedback-msg" id="feedback"></p>
+      <div class="quiz-actions">
+        <button class="pill primary" id="nextBtn" style="display:none;">Suivant ▶</button>
+      </div>
+    </div>
+
+    <div class="result-screen" id="resultScreen" style="display:none;">
+      <span class="result-badge" id="resultBadge">🏆</span>
+      <p class="result-score" id="resultScoreText">12 / 12</p>
+      <p class="result-best" id="resultBest"></p>
+      <p class="result-msg" id="resultMsg">Bravo !</p>
+      <div class="quiz-actions">
+        <button class="pill primary" id="playAgainBtn">🔄 Nouveau défi</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>&copy; Défi géo mondial — à but éducatif, dès 11 ans.               <br> 
+            Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean <br>
+            Merci de partager massivement !                              
+  </p>
+</footer>
+
+<script>
+const CAPITALS = [
+  ["Argentine","Buenos Aires","🇦🇷"], ["Nouvelle-Zélande","Wellington","🇳🇿"], ["Vietnam","Hanoï","🇻🇳"],
+  ["Islande","Reykjavik","🇮🇸"], ["Finlande","Helsinki","🇫🇮"], ["Nigéria","Abuja","🇳🇬"],
+  ["Chili","Santiago","🇨🇱"], ["Pérou","Lima","🇵🇪"], ["Thaïlande","Bangkok","🇹🇭"],
+  ["Ukraine","Kiev","🇺🇦"], ["Suisse","Berne","🇨🇭"], ["Éthiopie","Addis-Abeba","🇪🇹"],
+  ["Malaisie","Kuala Lumpur","🇲🇾"], ["Indonésie","Jakarta","🇮🇩"], ["Pologne","Varsovie","🇵🇱"],
+  ["Colombie","Bogotá","🇨🇴"]
+];
+
+const TRUEFALSE = [
+  { s:"Le Nil est le fleuve le plus long du monde.", a:true, e:"Le Nil (environ 6 650 km) est traditionnellement considéré comme le plus long fleuve du monde." },
+  { s:"Le Sahara est le plus grand désert du monde, toutes catégories confondues.", a:false, e:"C'est le plus grand désert chaud, mais l'Antarctique — un désert froid — est en réalité le plus vaste désert du monde." },
+  { s:"L'Everest est le plus haut sommet du monde au-dessus du niveau de la mer.", a:true, e:"Avec 8 849 m, l'Everest est bien le plus haut sommet mesuré depuis le niveau de la mer." },
+  { s:"Le Canada compte plus de lacs qu'aucun autre pays au monde.", a:true, e:"Le Canada abrite environ 60% des lacs de la planète, grâce à son passé glaciaire." },
+  { s:"L'Australie est à la fois un pays et un continent.", a:true, e:"L'Australie est unique : elle forme son propre continent tout en étant un seul pays." },
+  { s:"La Grande Muraille de Chine est visible à l'œil nu depuis la Lune.", a:false, e:"C'est un mythe très répandu : depuis la Lune, aucune construction humaine n'est visible à l'œil nu." },
+  { s:"Le Vatican est le plus petit pays du monde.", a:true, e:"Avec environ 0,49 km², le Vatican est bien le plus petit État souverain du monde." },
+  { s:"L'océan Pacifique est le plus grand océan du monde.", a:true, e:"Le Pacifique couvre à lui seul près d'un tiers de la surface de la Terre." },
+  { s:"Le mont Kilimandjaro se trouve en Afrique.", a:true, e:"Le Kilimandjaro, plus haut sommet d'Afrique, se situe en Tanzanie." },
+  { s:"La mer Morte est le point le plus bas de la surface terrestre accessible.", a:true, e:"Sa surface se situe à environ 430 m sous le niveau de la mer." },
+  { s:"L'Amazonie abrite la plus grande forêt tropicale du monde.", a:true, e:"La forêt amazonienne est la plus vaste forêt tropicale de la planète." },
+  { s:"Le Groenland est officiellement un continent.", a:false, e:"Le Groenland est la plus grande île du monde, mais ce n'est pas un continent." },
+  { s:"La Russie s'étend sur deux continents, l'Europe et l'Asie.", a:true, e:"La Russie est un pays transcontinental, à cheval sur l'Europe et l'Asie." },
+  { s:"L'équateur traverse le Brésil.", a:true, e:"L'équateur passe par le nord du Brésil, notamment près de la ville de Macapá." },
+  { s:"Le point culminant de l'Europe est le Mont Blanc.", a:false, e:"Selon la définition la plus courante, c'est le mont Elbrouz (Russie/Caucase) qui est le plus haut sommet d'Europe." },
+  { s:"Singapour est à la fois une ville et un pays.", a:true, e:"Singapour est une cité-État : sa capitale et son territoire national se confondent." }
+];
+
+const LANDMARKS = [
+  { d:"🗼 Une haute tour de fer construite pour une exposition universelle, au bord d'un fleuve.", a:"France", opts:["France","Italie","Espagne","Allemagne"] },
+  { d:"🏛️ Un immense amphithéâtre antique en forme d'ellipse, où avaient lieu des combats.", a:"Italie", opts:["Italie","Grèce","Turquie","Égypte"] },
+  { d:"🕌 Un mausolée de marbre blanc construit par un empereur pour son épouse.", a:"Inde", opts:["Inde","Pakistan","Iran","Turquie"] },
+  { d:"🏔️ Une ancienne cité inca perchée en haut des montagnes.", a:"Pérou", opts:["Pérou","Chili","Bolivie","Équateur"] },
+  { d:"🐫 D'immenses pyramides vieilles de plus de 4000 ans, près d'un grand fleuve.", a:"Égypte", opts:["Égypte","Soudan","Maroc","Jordanie"] },
+  { d:"🗽 Une statue géante tenant une torche, offerte en cadeau entre deux pays.", a:"États-Unis", opts:["États-Unis","Canada","France","Royaume-Uni"] },
+  { d:"🏯 Une très longue muraille de pierre qui traverse tout le nord du pays.", a:"Chine", opts:["Chine","Mongolie","Corée du Sud","Japon"] },
+  { d:"🎭 Un opéra en forme de grandes voiles blanches, construit au bord de l'eau.", a:"Australie", opts:["Australie","Nouvelle-Zélande","Afrique du Sud","Canada"] },
+  { d:"⛩️ Un mont sacré et volcanique, symbole du pays, souvent peint enneigé.", a:"Japon", opts:["Japon","Corée du Sud","Chine","Philippines"] },
+  { d:"🏟️ Une tour penchée célèbre, construite par erreur sur un sol trop mou.", a:"Italie", opts:["Italie","Espagne","France","Portugal"] }
+];
+
+const STORAGE_KEY = "geo11_14_best_";
+let allQuestions = [];
+let qi = 0, score = 0, streak = 0, timer = 0, timerHandle = null, answered = false, roundLen = 12;
+
+const modeSelect = document.getElementById('modeSelect');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildCapitalQ(){
+  const [country, capital, flag] = shuffle(CAPITALS)[0];
+  const distractors = shuffle(CAPITALS.map(c => c[1]).filter(c => c !== capital)).slice(0,3);
+  return { type:'capital', emoji: flag, text: "Quelle est la capitale de " + country + " ?", options: shuffle([capital, ...distractors]), correct: capital };
+}
+function buildTrueFalseQ(used){
+  let item;
+  do { item = shuffle(TRUEFALSE)[0]; } while (used.has(item.s) && used.size < TRUEFALSE.length);
+  used.add(item.s);
+  return { type:'tf', emoji:'🤔', text: item.s, options: ['Vrai','Faux'], correct: item.a ? 'Vrai' : 'Faux', explain: item.e };
+}
+function buildLandmarkQ(used){
+  let item;
+  do { item = shuffle(LANDMARKS)[0]; } while (used.has(item.d) && used.size < LANDMARKS.length);
+  used.add(item.d);
+  return { type:'landmark', emoji: item.d.split(' ')[0], text: item.d.substring(item.d.indexOf(' ')+1), options: shuffle(item.opts), correct: item.a };
+}
+
+function buildRound(len){
+  const usedTf = new Set(), usedLm = new Set();
+  const qs = [];
+  for (let i=0;i<len;i++){
+    const r = i % 3;
+    if (r === 0) qs.push(buildCapitalQ());
+    else if (r === 1) qs.push(buildTrueFalseQ(usedTf));
+    else qs.push(buildLandmarkQ(usedLm));
+  }
+  return shuffle(qs);
+}
+
+function startQuiz(len){
+  roundLen = len;
+  allQuestions = buildRound(len);
+  qi = 0; score = 0; streak = 0; timer = 0;
+
+  modeSelect.style.display = 'none';
+  resultScreen.style.display = 'none';
+  quizScreen.style.display = 'block';
+  document.getElementById('qTotal').textContent = allQuestions.length;
+
+  clearInterval(timerHandle);
+  timerHandle = setInterval(() => {
+    timer++;
+    document.getElementById('timerVal').textContent = timer;
+  }, 1000);
+
+  renderQuestion();
+}
+
+const TYPE_LABEL = { capital:'🧭 Capitale', tf:'🤔 Vrai ou faux', landmark:'🗺️ Monument' };
+
+function renderQuestion(){
+  answered = false;
+  document.getElementById('nextBtn').style.display = 'none';
+  const q = allQuestions[qi];
+  document.getElementById('qIndex').textContent = qi + 1;
+  document.getElementById('qType').innerHTML = TYPE_LABEL[q.type] + ' — Question <span id="qIndexInner">' + (qi+1) + '</span> / ' + allQuestions.length;
+  document.getElementById('qEmoji').textContent = q.emoji;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('streakVal').textContent = streak;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback-msg';
+  document.getElementById('progressFill').style.width = Math.round((qi / allQuestions.length) * 100) + '%';
+
+  const row = document.getElementById('choicesRow');
+  row.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectAnswer(btn, opt, q));
+    row.appendChild(btn);
+  });
+}
+
+function selectAnswer(btn, chosen, q){
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+
+  const feedback = document.getElementById('feedback');
+  if (chosen === q.correct){
+    btn.classList.add('correct');
+    score++; streak++;
+    feedback.textContent = '✅ Exact ! ' + (q.explain ? q.explain : '');
+    feedback.className = 'feedback-msg ok';
+  } else {
+    btn.classList.add('wrong');
+    streak = 0;
+    document.querySelectorAll('.choice-btn').forEach(b => { if (b.textContent === q.correct) b.classList.add('reveal'); });
+    feedback.textContent = '❌ Réponse : ' + q.correct + (q.explain ? '. ' + q.explain : '');
+    feedback.className = 'feedback-msg no';
+  }
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('streakVal').textContent = streak;
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'inline-block';
+
+  let advanced = false;
+  const advance = () => {
+    if (advanced) return;
+    advanced = true;
+    clearTimeout(autoAdvanceHandle);
+    qi++;
+    if (qi < allQuestions.length){ renderQuestion(); } else { endQuiz(); }
+  };
+  nextBtn.onclick = advance;
+  const autoAdvanceHandle = setTimeout(advance, 1900);
+}
+
+function endQuiz(){
+  clearInterval(timerHandle);
+  quizScreen.style.display = 'none';
+  resultScreen.style.display = 'block';
+  document.getElementById('progressFill').style.width = '100%';
+
+  const total = allQuestions.length;
+  document.getElementById('resultScoreText').textContent = score + ' / ' + total + '  (' + timer + ' s)';
+
+  let badge = '🥉', msg = 'Bon départ, continue à explorer la planète !';
+  const ratio = score / total;
+  if (ratio === 1){ badge = '💎'; msg = 'Score parfait ! Tu es un·e expert·e en géographie mondiale.'; }
+  else if (ratio >= 0.8){ badge = '🥇'; msg = 'Excellent ! Ta culture géo est impressionnante.'; }
+  else if (ratio >= 0.6){ badge = '🥈'; msg = "Bien joué, encore un peu d'entraînement pour l'or !"; }
+  document.getElementById('resultBadge').textContent = badge;
+  document.getElementById('resultMsg').textContent = msg;
+
+  const key = STORAGE_KEY + roundLen;
+  let best = 0;
+  try { best = parseInt(localStorage.getItem(key) || '0', 10); } catch(e){ best = 0; }
+  if (score > best){
+    best = score;
+    try { localStorage.setItem(key, String(best)); } catch(e){}
+  }
+  document.getElementById('resultBest').textContent = 'Meilleur score (défi ' + total + ' questions) : ' + best + ' / ' + total;
+}
+
+document.querySelectorAll('.mode-card').forEach(card => {
+  card.addEventListener('click', () => startQuiz(parseInt(card.dataset.len, 10)));
+});
+document.getElementById('playAgainBtn').addEventListener('click', () => {
+  resultScreen.style.display = 'none';
+  modeSelect.style.display = 'block';
+});
+</script>
+
+</body>
+</html>

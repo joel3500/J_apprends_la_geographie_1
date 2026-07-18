@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://joel3500.github.io/japprends_la_geographie/sitemap.xml

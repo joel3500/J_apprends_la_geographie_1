@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Le jeu des capitales — géographie 7-10 ans</title>
+<meta name="description" content="Jeu éducatif gratuit pour apprendre les capitales et les drapeaux du monde, pour les 7-10 ans. Trois niveaux de difficulté, score et défi chronométré." />
+<link rel="canonical" href="https://joel3500.github.io/japprends_la_geographie/geo_7_10.html" />
+<link rel="stylesheet" href="style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Le jeu des capitales",
+  "description": "Jeu éducatif gratuit pour apprendre les capitales et drapeaux du monde, dès 7 ans.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (navigateur web)",
+  "inLanguage": ["fr"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 7 },
+  "author": { "@type": "Person", "name": "Joel Sandé" }
+}
+</script>
+</head>
+<body>
+
+<nav class="page-nav" aria-label="Choisir une tranche d'âge">
+  <a href="index.html">🏠 Accueil</a>
+  <a href="geo_3_6.html">🐣 3-6 ans</a>
+  <a href="geo_7_10.html" aria-current="page">🧭 7-10 ans</a>
+  <a href="geo_11_14.html">🌐 11-14 ans</a>
+</nav>
+
+<header class="hero">
+  <h1>🧭 Le jeu des capitales</h1>
+  <p class="tagline">Associe chaque pays à sa capitale et deviens champion·ne de géographie !</p>
+</header>
+
+<main>
+  <div class="quiz-wrap">
+
+    <!-- Écran de sélection du niveau -->
+    <div class="mode-select" id="modeSelect">
+      <p class="intro">Choisis ton niveau pour commencer :</p>
+      <div class="mode-grid">
+        <button class="mode-card" data-level="facile">
+          <span class="m-emoji">🌱</span>
+          <span class="m-title">Facile</span>
+          <span class="m-sub">Pays très connus</span>
+        </button>
+        <button class="mode-card" data-level="moyen">
+          <span class="m-emoji">🧩</span>
+          <span class="m-title">Moyen</span>
+          <span class="m-sub">Un peu plus de défi</span>
+        </button>
+        <button class="mode-card" data-level="difficile">
+          <span class="m-emoji">🔥</span>
+          <span class="m-title">Difficile</span>
+          <span class="m-sub">Pour les experts !</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Écran de question -->
+    <div id="quizScreen" style="display:none;">
+      <div class="quiz-topbar">
+        <span class="quiz-stat">⭐ Score : <span id="scoreVal">0</span></span>
+        <span class="quiz-stat">🔥 Série : <span id="streakVal">0</span></span>
+        <span class="quiz-stat">⏱️ <span id="timerVal">0</span> s</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+
+      <p class="question-eyebrow">Question <span id="qIndex">1</span> / <span id="qTotal">8</span></p>
+      <span class="question-flag" id="qFlag">🏳️</span>
+      <p class="question-text" id="qText">Quelle est la capitale de... ?</p>
+
+      <div class="choices" id="choicesRow"></div>
+      <p class="feedback-msg" id="feedback"></p>
+    </div>
+
+    <!-- Écran de résultat -->
+    <div class="result-screen" id="resultScreen" style="display:none;">
+      <span class="result-badge" id="resultBadge">🏆</span>
+      <p class="result-score" id="resultScoreText">8 / 8</p>
+      <p class="result-best" id="resultBest"></p>
+      <p class="result-msg" id="resultMsg">Bravo, tu connais bien le monde !</p>
+      <div class="quiz-actions">
+        <button class="pill primary" id="playAgainBtn">🔄 Rejouer</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>&copy; Le jeu des capitales — à but éducatif, dès 7 ans.            <br>
+            Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean <br>
+            Merci de partager massivement !                              
+  </p>
+</footer>
+
+<script>
+const BANK = {
+  facile: [
+    ["France","Paris","🇫🇷"], ["Canada","Ottawa","🇨🇦"], ["Italie","Rome","🇮🇹"],
+    ["Japon","Tokyo","🇯🇵"], ["Espagne","Madrid","🇪🇸"], ["Allemagne","Berlin","🇩🇪"],
+    ["Brésil","Brasília","🇧🇷"], ["Égypte","Le Caire","🇪🇬"], ["Chine","Pékin","🇨🇳"],
+    ["Royaume-Uni","Londres","🇬🇧"], ["Mexique","Mexico","🇲🇽"], ["Russie","Moscou","🇷🇺"]
+  ],
+  moyen: [
+    ["Portugal","Lisbonne","🇵🇹"], ["Grèce","Athènes","🇬🇷"], ["Norvège","Oslo","🇳🇴"],
+    ["Maroc","Rabat","🇲🇦"], ["Kenya","Nairobi","🇰🇪"], ["Argentine","Buenos Aires","🇦🇷"],
+    ["Inde","New Delhi","🇮🇳"], ["Australie","Canberra","🇦🇺"], ["Suède","Stockholm","🇸🇪"],
+    ["Turquie","Ankara","🇹🇷"], ["Corée du Sud","Séoul","🇰🇷"], ["Pays-Bas","Amsterdam","🇳🇱"]
+  ],
+  difficile: [
+    ["Nouvelle-Zélande","Wellington","🇳🇿"], ["Vietnam","Hanoï","🇻🇳"], ["Islande","Reykjavik","🇮🇸"],
+    ["Finlande","Helsinki","🇫🇮"], ["Nigéria","Abuja","🇳🇬"], ["Chili","Santiago","🇨🇱"],
+    ["Pérou","Lima","🇵🇪"], ["Thaïlande","Bangkok","🇹🇭"], ["Ukraine","Kiev","🇺🇦"],
+    ["Suisse","Berne","🇨🇭"], ["Éthiopie","Addis-Abeba","🇪🇹"], ["Malaisie","Kuala Lumpur","🇲🇾"]
+  ]
+};
+const QUESTIONS_PER_ROUND = 8;
+const STORAGE_KEY = "geo7_10_best_";
+
+let level = null;
+let questions = [];
+let qi = 0;
+let score = 0;
+let streak = 0;
+let timer = 0;
+let timerHandle = null;
+let answered = false;
+
+const modeSelect = document.getElementById('modeSelect');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuestions(lvl){
+  const pool = BANK[lvl];
+  const chosen = shuffle(pool).slice(0, QUESTIONS_PER_ROUND);
+  const allCapitals = pool.map(p => p[1]);
+  return chosen.map(([country, capital, flag]) => {
+    const distractors = shuffle(allCapitals.filter(c => c !== capital)).slice(0, 3);
+    const options = shuffle([capital, ...distractors]);
+    return { country, capital, flag, options };
+  });
+}
+
+function startQuiz(lvl){
+  level = lvl;
+  questions = buildQuestions(lvl);
+  qi = 0; score = 0; streak = 0; timer = 0;
+
+  modeSelect.style.display = 'none';
+  resultScreen.style.display = 'none';
+  quizScreen.style.display = 'block';
+  document.getElementById('qTotal').textContent = questions.length;
+
+  clearInterval(timerHandle);
+  timerHandle = setInterval(() => {
+    timer++;
+    document.getElementById('timerVal').textContent = timer;
+  }, 1000);
+
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = questions[qi];
+  document.getElementById('qIndex').textContent = qi + 1;
+  document.getElementById('qFlag').textContent = q.flag;
+  document.getElementById('qText').textContent = "Quelle est la capitale de " + q.country + " ?";
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('streakVal').textContent = streak;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback-msg';
+  document.getElementById('progressFill').style.width = Math.round((qi / questions.length) * 100) + '%';
+
+  const row = document.getElementById('choicesRow');
+  row.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectAnswer(btn, opt, q.capital));
+    row.appendChild(btn);
+  });
+}
+
+function selectAnswer(btn, chosen, correct){
+  if (answered) return;
+  answered = true;
+  const buttons = document.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const feedback = document.getElementById('feedback');
+  if (chosen === correct){
+    btn.classList.add('correct');
+    score++; streak++;
+    feedback.textContent = '✅ Bravo, exact !';
+    feedback.className = 'feedback-msg ok';
+  } else {
+    btn.classList.add('wrong');
+    streak = 0;
+    buttons.forEach(b => { if (b.textContent === correct) b.classList.add('reveal'); });
+    feedback.textContent = '❌ La bonne réponse était : ' + correct;
+    feedback.className = 'feedback-msg no';
+  }
+
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('streakVal').textContent = streak;
+
+  setTimeout(() => {
+    qi++;
+    if (qi < questions.length){ renderQuestion(); } else { endQuiz(); }
+  }, 1300);
+}
+
+function endQuiz(){
+  clearInterval(timerHandle);
+  quizScreen.style.display = 'none';
+  resultScreen.style.display = 'block';
+  document.getElementById('progressFill').style.width = '100%';
+
+  const total = questions.length;
+  document.getElementById('resultScoreText').textContent = score + ' / ' + total + '  (' + timer + ' s)';
+
+  let badge = '🥉', msg = 'Bon début, continue à explorer le monde !';
+  const ratio = score / total;
+  if (ratio === 1){ badge = '🏆'; msg = 'Parfait ! Tu es un·e champion·ne des capitales !'; }
+  else if (ratio >= 0.75){ badge = '🥇'; msg = 'Excellent travail, presque tout juste !'; }
+  else if (ratio >= 0.5){ badge = '🥈'; msg = 'Bien joué, tu progresses bien !'; }
+  document.getElementById('resultBadge').textContent = badge;
+  document.getElementById('resultMsg').textContent = msg;
+
+  const key = STORAGE_KEY + level;
+  let best = 0;
+  try { best = parseInt(localStorage.getItem(key) || '0', 10); } catch(e){ best = 0; }
+  if (score > best){
+    best = score;
+    try { localStorage.setItem(key, String(best)); } catch(e){}
+  }
+  document.getElementById('resultBest').textContent = 'Meilleur score (niveau ' + level + ') : ' + best + ' / ' + total;
+}
+
+document.querySelectorAll('.mode-card').forEach(card => {
+  card.addEventListener('click', () => startQuiz(card.dataset.level));
+});
+document.getElementById('playAgainBtn').addEventListener('click', () => {
+  resultScreen.style.display = 'none';
+  modeSelect.style.display = 'block';
+});
+</script>
+
+</body>
+</html>
