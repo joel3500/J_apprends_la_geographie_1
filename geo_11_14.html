@@ -15,10 +15,10 @@
   "description": "Défi éducatif gratuit mêlant capitales, vrai ou faux et monuments du monde, dès 11 ans.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any (navigateur web)",
-  "inLanguage": ["fr"],
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
   "audience": { "@type": "PeopleAudience", "suggestedMinAge": 11 },
+  "inLanguage": ["fr","en","es","de","it"],
   "author": { "@type": "Person", "name": "Joel Sandé" }
 }
 </script>
@@ -26,50 +26,51 @@
 <body>
 
 <nav class="page-nav" aria-label="Choisir une tranche d'âge">
-  <a href="index.html">🏠 Accueil</a>
-  <a href="geo_3_6.html">🐣 3-6 ans</a>
-  <a href="geo_7_10.html">🧭 7-10 ans</a>
-  <a href="geo_11_14.html" aria-current="page">🌐 11-14 ans</a>
+  <a href="index.html" id="navHome">🏠 Accueil</a>
+  <a href="geo_3_6.html" id="nav36">🐣 3-6 ans</a>
+  <a href="geo_7_10.html" id="nav710">🧭 7-10 ans</a>
+  <a href="geo_11_14.html" aria-current="page" id="nav1114">🌐 11-14 ans</a>
 </nav>
+<div id="langSwitcher"></div>
 
 <header class="hero">
-  <h1>🌐 Défi géo mondial</h1>
-  <p class="tagline">Capitales, vrai ou faux, monuments célèbres : un défi complet pour tester ta culture géo !</p>
+  <h1 id="heroTitle">🌐 Défi géo mondial</h1>
+  <p class="tagline" id="heroTagline">Capitales, vrai ou faux, monuments célèbres : un défi complet pour tester ta culture géo !</p>
 </header>
 
 <main>
   <div class="quiz-wrap">
 
     <div class="mode-select" id="modeSelect">
-      <p class="intro">Choisis la longueur du défi :</p>
+      <p class="intro" id="introText">Choisis la longueur du défi :</p>
       <div class="mode-grid">
         <button class="mode-card" data-len="8">
           <span class="m-emoji">⚡</span>
-          <span class="m-title">Rapide</span>
-          <span class="m-sub">8 questions</span>
+          <span class="m-title" id="mode1Title">Rapide</span>
+          <span class="m-sub" id="mode1Sub">8 questions</span>
         </button>
         <button class="mode-card" data-len="12">
           <span class="m-emoji">🌐</span>
-          <span class="m-title">Complet</span>
-          <span class="m-sub">12 questions</span>
+          <span class="m-title" id="mode2Title">Complet</span>
+          <span class="m-sub" id="mode2Sub">12 questions</span>
         </button>
         <button class="mode-card" data-len="16">
           <span class="m-emoji">🏔️</span>
-          <span class="m-title">Expert</span>
-          <span class="m-sub">16 questions</span>
+          <span class="m-title" id="mode3Title">Expert</span>
+          <span class="m-sub" id="mode3Sub">16 questions</span>
         </button>
       </div>
     </div>
 
     <div id="quizScreen" style="display:none;">
       <div class="quiz-topbar">
-        <span class="quiz-stat">⭐ Score : <span id="scoreVal">0</span></span>
-        <span class="quiz-stat">🔥 Série : <span id="streakVal">0</span></span>
+        <span class="quiz-stat">⭐ <span id="scoreLabel">Score</span> : <span id="scoreVal">0</span></span>
+        <span class="quiz-stat">🔥 <span id="streakLabel">Série</span> : <span id="streakVal">0</span></span>
         <span class="quiz-stat">⏱️ <span id="timerVal">0</span> s</span>
       </div>
       <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
 
-      <p class="question-eyebrow" id="qType">Question <span id="qIndex">1</span> / <span id="qTotal">12</span></p>
+      <p class="question-eyebrow" id="qType"><span id="qTypeLabel">🧭 Capitale</span> — <span id="qWordLabel">Question</span> <span id="qIndex">1</span> / <span id="qTotal">12</span></p>
       <span class="question-flag" id="qEmoji">🌍</span>
       <p class="question-text" id="qText">…</p>
 
@@ -94,53 +95,319 @@
 </main>
 
 <footer>
-  <p>&copy; Défi géo mondial — à but éducatif, dès 11 ans.               <br> 
-            Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean <br>
-            Merci de partager massivement !                              
+  <p id="footerText">&copy; Défi géo mondial — à but éducatif, dès 11 ans.                <br>
+            Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean  <br>
+            Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean) <br>
+            Merci de partager massivement !
   </p>
 </footer>
 
 <script>
-const CAPITALS = [
-  ["Argentine","Buenos Aires","🇦🇷"], ["Nouvelle-Zélande","Wellington","🇳🇿"], ["Vietnam","Hanoï","🇻🇳"],
-  ["Islande","Reykjavik","🇮🇸"], ["Finlande","Helsinki","🇫🇮"], ["Nigéria","Abuja","🇳🇬"],
-  ["Chili","Santiago","🇨🇱"], ["Pérou","Lima","🇵🇪"], ["Thaïlande","Bangkok","🇹🇭"],
-  ["Ukraine","Kiev","🇺🇦"], ["Suisse","Berne","🇨🇭"], ["Éthiopie","Addis-Abeba","🇪🇹"],
-  ["Malaisie","Kuala Lumpur","🇲🇾"], ["Indonésie","Jakarta","🇮🇩"], ["Pologne","Varsovie","🇵🇱"],
-  ["Colombie","Bogotá","🇨🇴"]
-];
+const I18N = {
+  fr:{
+    docTitle:"Défi géo mondial — géographie 11-14 ans",
+    navHome:"🏠 Accueil", nav36:"🐣 3-6 ans", nav710:"🧭 7-10 ans", nav1114:"🌐 11-14 ans",
+    heroTitle:"🌐 Défi géo mondial",
+    heroTagline:"Capitales, vrai ou faux, monuments célèbres : un défi complet pour tester ta culture géo !",
+    introText:"Choisis la longueur du défi :",
+    mode1Title:"Rapide", mode2Title:"Complet", mode3Title:"Expert",
+    questionsSuffix:"questions",
+    scoreLabel:"Score", streakLabel:"Série",
+    typeLabel:{ capital:'🧭 Capitale', tf:'🤔 Vrai ou faux', landmark:'🗺️ Monument' },
+    qWord:"Question",
+    tfOptions:['Vrai','Faux'],
+    questionText:c => "Quelle est la capitale de " + c + " ?",
+    feedbackOk:e => '✅ Exact ! ' + (e || ''),
+    feedbackNo:(c,e) => '❌ Réponse : ' + c + (e ? '. ' + e : ''),
+    nextBtn:"Suivant ▶",
+    playAgainBtn:"🔄 Nouveau défi",
+    resultBadge:(ratio)=> ratio===1?'💎':ratio>=0.8?'🥇':ratio>=0.6?'🥈':'🥉',
+    resultMsg:(ratio)=> ratio===1 ? 'Score parfait ! Tu es un·e expert·e en géographie mondiale.' : ratio>=0.8 ? 'Excellent ! Ta culture géo est impressionnante.' : ratio>=0.6 ? "Bien joué, encore un peu d'entraînement pour l'or !" : 'Bon départ, continue à explorer la planète !',
+    bestPrefix:(total,best)=>'Meilleur score (défi '+total+' questions) : '+best+' / '+total,
+    footer:"&copy; Défi géo mondial — à but éducatif, dès 11 ans.<br>Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean<br>Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean)<br>Merci de partager massivement !",
+    capitals:[
+      ["Argentine","Buenos Aires","🇦🇷"], ["Nouvelle-Zélande","Wellington","🇳🇿"], ["Vietnam","Hanoï","🇻🇳"],
+      ["Islande","Reykjavik","🇮🇸"], ["Finlande","Helsinki","🇫🇮"], ["Nigéria","Abuja","🇳🇬"],
+      ["Chili","Santiago","🇨🇱"], ["Pérou","Lima","🇵🇪"], ["Thaïlande","Bangkok","🇹🇭"],
+      ["Ukraine","Kiev","🇺🇦"], ["Suisse","Berne","🇨🇭"], ["Éthiopie","Addis-Abeba","🇪🇹"],
+      ["Malaisie","Kuala Lumpur","🇲🇾"], ["Indonésie","Jakarta","🇮🇩"], ["Pologne","Varsovie","🇵🇱"],
+      ["Colombie","Bogotá","🇨🇴"]
+    ],
+    truefalse:[
+      { s:"Le Nil est le fleuve le plus long du monde.", a:true, e:"Le Nil (environ 6 650 km) est traditionnellement considéré comme le plus long fleuve du monde." },
+      { s:"Le Sahara est le plus grand désert du monde, toutes catégories confondues.", a:false, e:"C'est le plus grand désert chaud, mais l'Antarctique — un désert froid — est en réalité le plus vaste désert du monde." },
+      { s:"L'Everest est le plus haut sommet du monde au-dessus du niveau de la mer.", a:true, e:"Avec 8 849 m, l'Everest est bien le plus haut sommet mesuré depuis le niveau de la mer." },
+      { s:"Le Canada compte plus de lacs qu'aucun autre pays au monde.", a:true, e:"Le Canada abrite environ 60% des lacs de la planète, grâce à son passé glaciaire." },
+      { s:"L'Australie est à la fois un pays et un continent.", a:true, e:"L'Australie est unique : elle forme son propre continent tout en étant un seul pays." },
+      { s:"La Grande Muraille de Chine est visible à l'œil nu depuis la Lune.", a:false, e:"C'est un mythe très répandu : depuis la Lune, aucune construction humaine n'est visible à l'œil nu." },
+      { s:"Le Vatican est le plus petit pays du monde.", a:true, e:"Avec environ 0,49 km², le Vatican est bien le plus petit État souverain du monde." },
+      { s:"L'océan Pacifique est le plus grand océan du monde.", a:true, e:"Le Pacifique couvre à lui seul près d'un tiers de la surface de la Terre." },
+      { s:"Le mont Kilimandjaro se trouve en Afrique.", a:true, e:"Le Kilimandjaro, plus haut sommet d'Afrique, se situe en Tanzanie." },
+      { s:"La mer Morte est le point le plus bas de la surface terrestre accessible.", a:true, e:"Sa surface se situe à environ 430 m sous le niveau de la mer." },
+      { s:"L'Amazonie abrite la plus grande forêt tropicale du monde.", a:true, e:"La forêt amazonienne est la plus vaste forêt tropicale de la planète." },
+      { s:"Le Groenland est officiellement un continent.", a:false, e:"Le Groenland est la plus grande île du monde, mais ce n'est pas un continent." },
+      { s:"La Russie s'étend sur deux continents, l'Europe et l'Asie.", a:true, e:"La Russie est un pays transcontinental, à cheval sur l'Europe et l'Asie." },
+      { s:"L'équateur traverse le Brésil.", a:true, e:"L'équateur passe par le nord du Brésil, notamment près de la ville de Macapá." },
+      { s:"Le point culminant de l'Europe est le Mont Blanc.", a:false, e:"Selon la définition la plus courante, c'est le mont Elbrouz (Russie/Caucase) qui est le plus haut sommet d'Europe." },
+      { s:"Singapour est à la fois une ville et un pays.", a:true, e:"Singapour est une cité-État : sa capitale et son territoire national se confondent." }
+    ],
+    landmarks:[
+      { d:"🗼 Une haute tour de fer construite pour une exposition universelle, au bord d'un fleuve.", a:"France", opts:["France","Italie","Espagne","Allemagne"] },
+      { d:"🏛️ Un immense amphithéâtre antique en forme d'ellipse, où avaient lieu des combats.", a:"Italie", opts:["Italie","Grèce","Turquie","Égypte"] },
+      { d:"🕌 Un mausolée de marbre blanc construit par un empereur pour son épouse.", a:"Inde", opts:["Inde","Pakistan","Iran","Turquie"] },
+      { d:"🏔️ Une ancienne cité inca perchée en haut des montagnes.", a:"Pérou", opts:["Pérou","Chili","Bolivie","Équateur"] },
+      { d:"🐫 D'immenses pyramides vieilles de plus de 4000 ans, près d'un grand fleuve.", a:"Égypte", opts:["Égypte","Soudan","Maroc","Jordanie"] },
+      { d:"🗽 Une statue géante tenant une torche, offerte en cadeau entre deux pays.", a:"États-Unis", opts:["États-Unis","Canada","France","Royaume-Uni"] },
+      { d:"🏯 Une très longue muraille de pierre qui traverse tout le nord du pays.", a:"Chine", opts:["Chine","Mongolie","Corée du Sud","Japon"] },
+      { d:"🎭 Un opéra en forme de grandes voiles blanches, construit au bord de l'eau.", a:"Australie", opts:["Australie","Nouvelle-Zélande","Afrique du Sud","Canada"] },
+      { d:"⛩️ Un mont sacré et volcanique, symbole du pays, souvent peint enneigé.", a:"Japon", opts:["Japon","Corée du Sud","Chine","Philippines"] },
+      { d:"🏟️ Une tour penchée célèbre, construite par erreur sur un sol trop mou.", a:"Italie", opts:["Italie","Espagne","France","Portugal"] }
+    ]
+  },
+  en:{
+    docTitle:"World geo challenge — geography ages 11-14",
+    navHome:"🏠 Home", nav36:"🐣 3-6 yrs", nav710:"🧭 7-10 yrs", nav1114:"🌐 11-14 yrs",
+    heroTitle:"🌐 World geo challenge",
+    heroTagline:"Capitals, true or false, famous landmarks: a complete challenge to test your geography knowledge!",
+    introText:"Choose the length of the challenge:",
+    mode1Title:"Quick", mode2Title:"Full", mode3Title:"Expert",
+    questionsSuffix:"questions",
+    scoreLabel:"Score", streakLabel:"Streak",
+    typeLabel:{ capital:'🧭 Capital', tf:'🤔 True or false', landmark:'🗺️ Landmark' },
+    qWord:"Question",
+    tfOptions:['True','False'],
+    questionText:c => "What is the capital of " + c + "?",
+    feedbackOk:e => '✅ Correct! ' + (e || ''),
+    feedbackNo:(c,e) => '❌ Answer: ' + c + (e ? '. ' + e : ''),
+    nextBtn:"Next ▶",
+    playAgainBtn:"🔄 New challenge",
+    resultBadge:(ratio)=> ratio===1?'💎':ratio>=0.8?'🥇':ratio>=0.6?'🥈':'🥉',
+    resultMsg:(ratio)=> ratio===1 ? 'Perfect score! You are a world geography expert.' : ratio>=0.8 ? 'Excellent! Your geography knowledge is impressive.' : ratio>=0.6 ? "Well done, a bit more practice for gold!" : 'Good start, keep exploring the planet!',
+    bestPrefix:(total,best)=>'Best score ('+total+'-question challenge): '+best+' / '+total,
+    footer:"&copy; World geo challenge — for educational purposes, ages 11+.<br>Learning game made by Joel Sandé, Saguenay lac Saint-Jean<br>All rights reserved, copying strictly forbidden (created by Joel Sandé, Saguenay lac Saint-Jean)<br>Thank you for sharing widely!",
+    capitals:[
+      ["Argentina","Buenos Aires","🇦🇷"], ["New Zealand","Wellington","🇳🇿"], ["Vietnam","Hanoi","🇻🇳"],
+      ["Iceland","Reykjavik","🇮🇸"], ["Finland","Helsinki","🇫🇮"], ["Nigeria","Abuja","🇳🇬"],
+      ["Chile","Santiago","🇨🇱"], ["Peru","Lima","🇵🇪"], ["Thailand","Bangkok","🇹🇭"],
+      ["Ukraine","Kyiv","🇺🇦"], ["Switzerland","Bern","🇨🇭"], ["Ethiopia","Addis Ababa","🇪🇹"],
+      ["Malaysia","Kuala Lumpur","🇲🇾"], ["Indonesia","Jakarta","🇮🇩"], ["Poland","Warsaw","🇵🇱"],
+      ["Colombia","Bogotá","🇨🇴"]
+    ],
+    truefalse:[
+      { s:"The Nile is the longest river in the world.", a:true, e:"The Nile (about 6,650 km) is traditionally considered the longest river in the world." },
+      { s:"The Sahara is the largest desert in the world, of any kind.", a:false, e:"It's the largest hot desert, but Antarctica — a cold desert — is actually the largest desert in the world." },
+      { s:"Everest is the highest peak in the world above sea level.", a:true, e:"At 8,849 m, Everest is indeed the highest peak measured from sea level." },
+      { s:"Canada has more lakes than any other country in the world.", a:true, e:"Canada is home to about 60% of the planet's lakes, thanks to its glacial past." },
+      { s:"Australia is both a country and a continent.", a:true, e:"Australia is unique: it forms its own continent while being a single country." },
+      { s:"The Great Wall of China is visible to the naked eye from the Moon.", a:false, e:"This is a very common myth: from the Moon, no human construction is visible to the naked eye." },
+      { s:"The Vatican is the smallest country in the world.", a:true, e:"At about 0.49 km², the Vatican is indeed the smallest sovereign state in the world." },
+      { s:"The Pacific Ocean is the largest ocean in the world.", a:true, e:"The Pacific alone covers nearly a third of the Earth's surface." },
+      { s:"Mount Kilimanjaro is located in Africa.", a:true, e:"Kilimanjaro, Africa's highest peak, is located in Tanzania." },
+      { s:"The Dead Sea is the lowest accessible point on Earth's surface.", a:true, e:"Its surface lies about 430 m below sea level." },
+      { s:"The Amazon is home to the largest rainforest in the world.", a:true, e:"The Amazon rainforest is the largest tropical forest on the planet." },
+      { s:"Greenland is officially a continent.", a:false, e:"Greenland is the largest island in the world, but it is not a continent." },
+      { s:"Russia spans two continents, Europe and Asia.", a:true, e:"Russia is a transcontinental country, straddling Europe and Asia." },
+      { s:"The equator crosses Brazil.", a:true, e:"The equator passes through northern Brazil, notably near the city of Macapá." },
+      { s:"Europe's highest point is Mont Blanc.", a:false, e:"By the most common definition, it is Mount Elbrus (Russia/Caucasus) that is Europe's highest peak." },
+      { s:"Singapore is both a city and a country.", a:true, e:"Singapore is a city-state: its capital and its national territory are one and the same." }
+    ],
+    landmarks:[
+      { d:"🗼 A tall iron tower built for a world's fair, next to a river.", a:"France", opts:["France","Italy","Spain","Germany"] },
+      { d:"🏛️ A huge ancient ellipse-shaped amphitheater, where battles once took place.", a:"Italy", opts:["Italy","Greece","Turkey","Egypt"] },
+      { d:"🕌 A white marble mausoleum built by an emperor for his wife.", a:"India", opts:["India","Pakistan","Iran","Turkey"] },
+      { d:"🏔️ An ancient Inca city perched high in the mountains.", a:"Peru", opts:["Peru","Chile","Bolivia","Ecuador"] },
+      { d:"🐫 Huge pyramids over 4000 years old, near a great river.", a:"Egypt", opts:["Egypt","Sudan","Morocco","Jordan"] },
+      { d:"🗽 A giant statue holding a torch, given as a gift between two countries.", a:"United States", opts:["United States","Canada","France","United Kingdom"] },
+      { d:"🏯 A very long stone wall that crosses the whole north of the country.", a:"China", opts:["China","Mongolia","South Korea","Japan"] },
+      { d:"🎭 An opera house shaped like large white sails, built by the water.", a:"Australia", opts:["Australia","New Zealand","South Africa","Canada"] },
+      { d:"⛩️ A sacred volcanic mountain, a symbol of the country, often shown snow-capped.", a:"Japan", opts:["Japan","South Korea","China","Philippines"] },
+      { d:"🏟️ A famous leaning tower, built by mistake on ground that was too soft.", a:"Italy", opts:["Italy","Spain","France","Portugal"] }
+    ]
+  },
+  es:{
+    docTitle:"Desafío geo mundial — geografía 11-14 años",
+    navHome:"🏠 Inicio", nav36:"🐣 3-6 años", nav710:"🧭 7-10 años", nav1114:"🌐 11-14 años",
+    heroTitle:"🌐 Desafío geo mundial",
+    heroTagline:"Capitales, verdadero o falso, monumentos famosos: ¡un desafío completo para poner a prueba tu cultura geográfica!",
+    introText:"Elige la duración del desafío:",
+    mode1Title:"Rápido", mode2Title:"Completo", mode3Title:"Experto",
+    questionsSuffix:"preguntas",
+    scoreLabel:"Puntos", streakLabel:"Racha",
+    typeLabel:{ capital:'🧭 Capital', tf:'🤔 Verdadero o falso', landmark:'🗺️ Monumento' },
+    qWord:"Pregunta",
+    tfOptions:['Verdadero','Falso'],
+    questionText:c => "¿Cuál es la capital de " + c + "?",
+    feedbackOk:e => '✅ ¡Correcto! ' + (e || ''),
+    feedbackNo:(c,e) => '❌ Respuesta: ' + c + (e ? '. ' + e : ''),
+    nextBtn:"Siguiente ▶",
+    playAgainBtn:"🔄 Nuevo desafío",
+    resultBadge:(ratio)=> ratio===1?'💎':ratio>=0.8?'🥇':ratio>=0.6?'🥈':'🥉',
+    resultMsg:(ratio)=> ratio===1 ? '¡Puntuación perfecta! Eres un experto en geografía mundial.' : ratio>=0.8 ? '¡Excelente! Tu cultura geográfica es impresionante.' : ratio>=0.6 ? '¡Bien hecho, un poco más de práctica para el oro!' : '¡Buen comienzo, sigue explorando el planeta!',
+    bestPrefix:(total,best)=>'Mejor puntuación (desafío de '+total+' preguntas): '+best+' / '+total,
+    footer:"&copy; Desafío geo mundial — con fines educativos, desde 11 años.<br>Juego educativo creado por Joel Sandé, Saguenay lac Saint-Jean<br>Todos los derechos reservados, copia estrictamente prohibida (creado por Joel Sandé, Saguenay lac Saint-Jean)<br>¡Gracias por compartir masivamente!",
+    capitals:[
+      ["Argentina","Buenos Aires","🇦🇷"], ["Nueva Zelanda","Wellington","🇳🇿"], ["Vietnam","Hanói","🇻🇳"],
+      ["Islandia","Reikiavik","🇮🇸"], ["Finlandia","Helsinki","🇫🇮"], ["Nigeria","Abuya","🇳🇬"],
+      ["Chile","Santiago","🇨🇱"], ["Perú","Lima","🇵🇪"], ["Tailandia","Bangkok","🇹🇭"],
+      ["Ucrania","Kiev","🇺🇦"], ["Suiza","Berna","🇨🇭"], ["Etiopía","Adís Abeba","🇪🇹"],
+      ["Malasia","Kuala Lumpur","🇲🇾"], ["Indonesia","Yakarta","🇮🇩"], ["Polonia","Varsovia","🇵🇱"],
+      ["Colombia","Bogotá","🇨🇴"]
+    ],
+    truefalse:[
+      { s:"El Nilo es el río más largo del mundo.", a:true, e:"El Nilo (unos 6.650 km) se considera tradicionalmente el río más largo del mundo." },
+      { s:"El Sahara es el desierto más grande del mundo, de cualquier tipo.", a:false, e:"Es el desierto cálido más grande, pero la Antártida — un desierto frío — es en realidad el desierto más extenso del mundo." },
+      { s:"El Everest es el pico más alto del mundo sobre el nivel del mar.", a:true, e:"Con 8.849 m, el Everest es efectivamente el pico más alto medido desde el nivel del mar." },
+      { s:"Canadá tiene más lagos que cualquier otro país del mundo.", a:true, e:"Canadá alberga cerca del 60% de los lagos del planeta, gracias a su pasado glaciar." },
+      { s:"Australia es a la vez un país y un continente.", a:true, e:"Australia es única: forma su propio continente y a la vez es un solo país." },
+      { s:"La Gran Muralla China es visible a simple vista desde la Luna.", a:false, e:"Es un mito muy extendido: desde la Luna, ninguna construcción humana es visible a simple vista." },
+      { s:"El Vaticano es el país más pequeño del mundo.", a:true, e:"Con unos 0,49 km², el Vaticano es efectivamente el estado soberano más pequeño del mundo." },
+      { s:"El océano Pacífico es el océano más grande del mundo.", a:true, e:"El Pacífico cubre por sí solo casi un tercio de la superficie de la Tierra." },
+      { s:"El monte Kilimanjaro se encuentra en África.", a:true, e:"El Kilimanjaro, el pico más alto de África, se encuentra en Tanzania." },
+      { s:"El mar Muerto es el punto accesible más bajo de la superficie terrestre.", a:true, e:"Su superficie se encuentra a unos 430 m bajo el nivel del mar." },
+      { s:"La Amazonía alberga la selva tropical más grande del mundo.", a:true, e:"La selva amazónica es la selva tropical más extensa del planeta." },
+      { s:"Groenlandia es oficialmente un continente.", a:false, e:"Groenlandia es la isla más grande del mundo, pero no es un continente." },
+      { s:"Rusia se extiende por dos continentes, Europa y Asia.", a:true, e:"Rusia es un país transcontinental, a caballo entre Europa y Asia." },
+      { s:"El ecuador atraviesa Brasil.", a:true, e:"El ecuador pasa por el norte de Brasil, cerca de la ciudad de Macapá." },
+      { s:"El punto más alto de Europa es el Mont Blanc.", a:false, e:"Según la definición más común, es el monte Elbrús (Rusia/Cáucaso) el pico más alto de Europa." },
+      { s:"Singapur es a la vez una ciudad y un país.", a:true, e:"Singapur es una ciudad-estado: su capital y su territorio nacional son lo mismo." }
+    ],
+    landmarks:[
+      { d:"🗼 Una alta torre de hierro construida para una exposición universal, junto a un río.", a:"Francia", opts:["Francia","Italia","España","Alemania"] },
+      { d:"🏛️ Un inmenso anfiteatro antiguo con forma de elipse, donde se libraban combates.", a:"Italia", opts:["Italia","Grecia","Turquía","Egipto"] },
+      { d:"🕌 Un mausoleo de mármol blanco construido por un emperador para su esposa.", a:"India", opts:["India","Pakistán","Irán","Turquía"] },
+      { d:"🏔️ Una antigua ciudad inca encaramada en lo alto de las montañas.", a:"Perú", opts:["Perú","Chile","Bolivia","Ecuador"] },
+      { d:"🐫 Inmensas pirámides de más de 4000 años, cerca de un gran río.", a:"Egipto", opts:["Egipto","Sudán","Marruecos","Jordania"] },
+      { d:"🗽 Una estatua gigante que sostiene una antorcha, ofrecida como regalo entre dos países.", a:"Estados Unidos", opts:["Estados Unidos","Canadá","Francia","Reino Unido"] },
+      { d:"🏯 Una larguísima muralla de piedra que atraviesa todo el norte del país.", a:"China", opts:["China","Mongolia","Corea del Sur","Japón"] },
+      { d:"🎭 Un teatro de ópera con forma de grandes velas blancas, construido junto al agua.", a:"Australia", opts:["Australia","Nueva Zelanda","Sudáfrica","Canadá"] },
+      { d:"⛩️ Una montaña volcánica sagrada, símbolo del país, a menudo representada nevada.", a:"Japón", opts:["Japón","Corea del Sur","China","Filipinas"] },
+      { d:"🏟️ Una famosa torre inclinada, construida por error sobre un suelo demasiado blando.", a:"Italia", opts:["Italia","España","Francia","Portugal"] }
+    ]
+  },
+  de:{
+    docTitle:"Welt-Geo-Herausforderung — Geografie 11-14 Jahre",
+    navHome:"🏠 Start", nav36:"🐣 3-6 Jahre", nav710:"🧭 7-10 Jahre", nav1114:"🌐 11-14 Jahre",
+    heroTitle:"🌐 Welt-Geo-Herausforderung",
+    heroTagline:"Hauptstädte, Wahr oder Falsch, berühmte Bauwerke: eine komplette Herausforderung, um dein Geografiewissen zu testen!",
+    introText:"Wähle die Länge der Herausforderung:",
+    mode1Title:"Schnell", mode2Title:"Komplett", mode3Title:"Experte",
+    questionsSuffix:"Fragen",
+    scoreLabel:"Punkte", streakLabel:"Serie",
+    typeLabel:{ capital:'🧭 Hauptstadt', tf:'🤔 Wahr oder falsch', landmark:'🗺️ Bauwerk' },
+    qWord:"Frage",
+    tfOptions:['Wahr','Falsch'],
+    questionText:c => "Was ist die Hauptstadt von " + c + "?",
+    feedbackOk:e => '✅ Richtig! ' + (e || ''),
+    feedbackNo:(c,e) => '❌ Antwort: ' + c + (e ? '. ' + e : ''),
+    nextBtn:"Weiter ▶",
+    playAgainBtn:"🔄 Neue Herausforderung",
+    resultBadge:(ratio)=> ratio===1?'💎':ratio>=0.8?'🥇':ratio>=0.6?'🥈':'🥉',
+    resultMsg:(ratio)=> ratio===1 ? 'Perfekte Punktzahl! Du bist ein Experte in Weltgeografie.' : ratio>=0.8 ? 'Ausgezeichnet! Dein geografisches Wissen ist beeindruckend.' : ratio>=0.6 ? 'Gut gemacht, noch etwas Übung für Gold!' : 'Guter Anfang, erkunde den Planeten weiter!',
+    bestPrefix:(total,best)=>'Bestwert (Herausforderung mit '+total+' Fragen): '+best+' / '+total,
+    footer:"&copy; Welt-Geo-Herausforderung — zu Lernzwecken, ab 11 Jahren.<br>Lernspiel erstellt von Joel Sandé, Saguenay lac Saint-Jean<br>Alle Rechte vorbehalten, Kopieren strengstens untersagt (erstellt von Joel Sandé, Saguenay lac Saint-Jean)<br>Danke, dass ihr es fleißig teilt!",
+    capitals:[
+      ["Argentinien","Buenos Aires","🇦🇷"], ["Neuseeland","Wellington","🇳🇿"], ["Vietnam","Hanoi","🇻🇳"],
+      ["Island","Reykjavik","🇮🇸"], ["Finnland","Helsinki","🇫🇮"], ["Nigeria","Abuja","🇳🇬"],
+      ["Chile","Santiago","🇨🇱"], ["Peru","Lima","🇵🇪"], ["Thailand","Bangkok","🇹🇭"],
+      ["Ukraine","Kiew","🇺🇦"], ["Schweiz","Bern","🇨🇭"], ["Äthiopien","Addis Abeba","🇪🇹"],
+      ["Malaysia","Kuala Lumpur","🇲🇾"], ["Indonesien","Jakarta","🇮🇩"], ["Polen","Warschau","🇵🇱"],
+      ["Kolumbien","Bogotá","🇨🇴"]
+    ],
+    truefalse:[
+      { s:"Der Nil ist der längste Fluss der Welt.", a:true, e:"Der Nil (etwa 6.650 km) gilt traditionell als der längste Fluss der Welt." },
+      { s:"Die Sahara ist die größte Wüste der Welt, aller Arten.", a:false, e:"Sie ist die größte heiße Wüste, aber die Antarktis — eine kalte Wüste — ist eigentlich die größte Wüste der Welt." },
+      { s:"Der Everest ist der höchste Gipfel der Welt über dem Meeresspiegel.", a:true, e:"Mit 8.849 m ist der Everest tatsächlich der höchste, vom Meeresspiegel aus gemessene Gipfel." },
+      { s:"Kanada hat mehr Seen als jedes andere Land der Welt.", a:true, e:"Kanada beherbergt dank seiner eiszeitlichen Vergangenheit etwa 60% der Seen der Erde." },
+      { s:"Australien ist sowohl ein Land als auch ein Kontinent.", a:true, e:"Australien ist einzigartig: Es bildet seinen eigenen Kontinent und ist gleichzeitig ein einziges Land." },
+      { s:"Die Chinesische Mauer ist mit bloßem Auge vom Mond aus sichtbar.", a:false, e:"Das ist ein weitverbreiteter Mythos: Vom Mond aus ist mit bloßem Auge kein menschliches Bauwerk sichtbar." },
+      { s:"Der Vatikan ist das kleinste Land der Welt.", a:true, e:"Mit etwa 0,49 km² ist der Vatikan tatsächlich der kleinste souveräne Staat der Welt." },
+      { s:"Der Pazifische Ozean ist der größte Ozean der Welt.", a:true, e:"Der Pazifik allein bedeckt fast ein Drittel der Erdoberfläche." },
+      { s:"Der Kilimandscharo liegt in Afrika.", a:true, e:"Der Kilimandscharo, Afrikas höchster Gipfel, liegt in Tansania." },
+      { s:"Das Tote Meer ist der niedrigste zugängliche Punkt der Erdoberfläche.", a:true, e:"Seine Oberfläche liegt etwa 430 m unter dem Meeresspiegel." },
+      { s:"Amazonien beherbergt den größten Regenwald der Welt.", a:true, e:"Der Amazonas-Regenwald ist der größte tropische Wald der Erde." },
+      { s:"Grönland ist offiziell ein Kontinent.", a:false, e:"Grönland ist die größte Insel der Welt, aber kein Kontinent." },
+      { s:"Russland erstreckt sich über zwei Kontinente, Europa und Asien.", a:true, e:"Russland ist ein transkontinentales Land, das sich über Europa und Asien erstreckt." },
+      { s:"Der Äquator verläuft durch Brasilien.", a:true, e:"Der Äquator verläuft durch den Norden Brasiliens, insbesondere nahe der Stadt Macapá." },
+      { s:"Der höchste Punkt Europas ist der Mont Blanc.", a:false, e:"Nach der gängigsten Definition ist der Elbrus (Russland/Kaukasus) der höchste Gipfel Europas." },
+      { s:"Singapur ist sowohl eine Stadt als auch ein Land.", a:true, e:"Singapur ist ein Stadtstaat: seine Hauptstadt und sein Staatsgebiet sind ein und dasselbe." }
+    ],
+    landmarks:[
+      { d:"🗼 Ein hoher Eisenturm, der für eine Weltausstellung an einem Fluss erbaut wurde.", a:"Frankreich", opts:["Frankreich","Italien","Spanien","Deutschland"] },
+      { d:"🏛️ Ein riesiges antikes Amphitheater in Ellipsenform, in dem einst Kämpfe stattfanden.", a:"Italien", opts:["Italien","Griechenland","Türkei","Ägypten"] },
+      { d:"🕌 Ein Mausoleum aus weißem Marmor, das ein Kaiser für seine Frau erbauen ließ.", a:"Indien", opts:["Indien","Pakistan","Iran","Türkei"] },
+      { d:"🏔️ Eine alte Inka-Stadt hoch oben in den Bergen.", a:"Peru", opts:["Peru","Chile","Bolivien","Ecuador"] },
+      { d:"🐫 Riesige, über 4000 Jahre alte Pyramiden in der Nähe eines großen Flusses.", a:"Ägypten", opts:["Ägypten","Sudan","Marokko","Jordanien"] },
+      { d:"🗽 Eine riesige Statue mit einer Fackel, ein Geschenk zwischen zwei Ländern.", a:"Vereinigte Staaten", opts:["Vereinigte Staaten","Kanada","Frankreich","Vereinigtes Königreich"] },
+      { d:"🏯 Eine sehr lange Steinmauer, die den gesamten Norden des Landes durchquert.", a:"China", opts:["China","Mongolei","Südkorea","Japan"] },
+      { d:"🎭 Ein Opernhaus in Form großer weißer Segel, am Wasser erbaut.", a:"Australien", opts:["Australien","Neuseeland","Südafrika","Kanada"] },
+      { d:"⛩️ Ein heiliger vulkanischer Berg, Symbol des Landes, oft schneebedeckt dargestellt.", a:"Japan", opts:["Japan","Südkorea","China","Philippinen"] },
+      { d:"🏟️ Ein berühmter schiefer Turm, versehentlich auf zu weichem Boden erbaut.", a:"Italien", opts:["Italien","Spanien","Frankreich","Portugal"] }
+    ]
+  },
+  it:{
+    docTitle:"Sfida geo mondiale — geografia 11-14 anni",
+    navHome:"🏠 Home", nav36:"🐣 3-6 anni", nav710:"🧭 7-10 anni", nav1114:"🌐 11-14 anni",
+    heroTitle:"🌐 Sfida geo mondiale",
+    heroTagline:"Capitali, vero o falso, monumenti famosi: una sfida completa per testare la tua cultura geografica!",
+    introText:"Scegli la lunghezza della sfida:",
+    mode1Title:"Rapida", mode2Title:"Completa", mode3Title:"Esperto",
+    questionsSuffix:"domande",
+    scoreLabel:"Punti", streakLabel:"Serie",
+    typeLabel:{ capital:'🧭 Capitale', tf:'🤔 Vero o falso', landmark:'🗺️ Monumento' },
+    qWord:"Domanda",
+    tfOptions:['Vero','Falso'],
+    questionText:c => "Qual è la capitale di " + c + "?",
+    feedbackOk:e => '✅ Esatto! ' + (e || ''),
+    feedbackNo:(c,e) => '❌ Risposta: ' + c + (e ? '. ' + e : ''),
+    nextBtn:"Avanti ▶",
+    playAgainBtn:"🔄 Nuova sfida",
+    resultBadge:(ratio)=> ratio===1?'💎':ratio>=0.8?'🥇':ratio>=0.6?'🥈':'🥉',
+    resultMsg:(ratio)=> ratio===1 ? 'Punteggio perfetto! Sei un esperto di geografia mondiale.' : ratio>=0.8 ? 'Eccellente! La tua cultura geografica è impressionante.' : ratio>=0.6 ? "Ben fatto, ancora un po' di allenamento per l'oro!" : 'Buon inizio, continua a esplorare il pianeta!',
+    bestPrefix:(total,best)=>'Miglior punteggio (sfida da '+total+' domande): '+best+' / '+total,
+    footer:"&copy; Sfida geo mondiale — a scopo educativo, dai 11 anni.<br>Gioco educativo creato da Joel Sandé, Saguenay lac Saint-Jean<br>Tutti i diritti riservati, copia rigorosamente vietata (creato da Joel Sandé, Saguenay lac Saint-Jean)<br>Grazie di condividerlo tantissimo!",
+    capitals:[
+      ["Argentina","Buenos Aires","🇦🇷"], ["Nuova Zelanda","Wellington","🇳🇿"], ["Vietnam","Hanoi","🇻🇳"],
+      ["Islanda","Reykjavik","🇮🇸"], ["Finlandia","Helsinki","🇫🇮"], ["Nigeria","Abuja","🇳🇬"],
+      ["Cile","Santiago","🇨🇱"], ["Perù","Lima","🇵🇪"], ["Thailandia","Bangkok","🇹🇭"],
+      ["Ucraina","Kiev","🇺🇦"], ["Svizzera","Berna","🇨🇭"], ["Etiopia","Addis Abeba","🇪🇹"],
+      ["Malesia","Kuala Lumpur","🇲🇾"], ["Indonesia","Giacarta","🇮🇩"], ["Polonia","Varsavia","🇵🇱"],
+      ["Colombia","Bogotá","🇨🇴"]
+    ],
+    truefalse:[
+      { s:"Il Nilo è il fiume più lungo del mondo.", a:true, e:"Il Nilo (circa 6.650 km) è tradizionalmente considerato il fiume più lungo del mondo." },
+      { s:"Il Sahara è il deserto più grande del mondo, in assoluto.", a:false, e:"È il deserto caldo più grande, ma l'Antartide — un deserto freddo — è in realtà il deserto più vasto del mondo." },
+      { s:"L'Everest è la vetta più alta del mondo sopra il livello del mare.", a:true, e:"Con 8.849 m, l'Everest è effettivamente la vetta più alta misurata dal livello del mare." },
+      { s:"Il Canada ha più laghi di qualsiasi altro paese al mondo.", a:true, e:"Il Canada ospita circa il 60% dei laghi del pianeta, grazie al suo passato glaciale." },
+      { s:"L'Australia è allo stesso tempo un paese e un continente.", a:true, e:"L'Australia è unica: costituisce il proprio continente pur essendo un unico paese." },
+      { s:"La Grande Muraglia Cinese è visibile a occhio nudo dalla Luna.", a:false, e:"È un mito molto diffuso: dalla Luna, nessuna costruzione umana è visibile a occhio nudo." },
+      { s:"Il Vaticano è il paese più piccolo del mondo.", a:true, e:"Con circa 0,49 km², il Vaticano è davvero il più piccolo stato sovrano del mondo." },
+      { s:"L'oceano Pacifico è il più grande oceano del mondo.", a:true, e:"Il Pacifico da solo copre quasi un terzo della superficie terrestre." },
+      { s:"Il monte Kilimangiaro si trova in Africa.", a:true, e:"Il Kilimangiaro, la vetta più alta dell'Africa, si trova in Tanzania." },
+      { s:"Il mar Morto è il punto accessibile più basso della superficie terrestre.", a:true, e:"La sua superficie si trova a circa 430 m sotto il livello del mare." },
+      { s:"L'Amazzonia ospita la più grande foresta tropicale del mondo.", a:true, e:"La foresta amazzonica è la più vasta foresta tropicale del pianeta." },
+      { s:"La Groenlandia è ufficialmente un continente.", a:false, e:"La Groenlandia è l'isola più grande del mondo, ma non è un continente." },
+      { s:"La Russia si estende su due continenti, Europa e Asia.", a:true, e:"La Russia è un paese transcontinentale, a cavallo tra Europa e Asia." },
+      { s:"L'equatore attraversa il Brasile.", a:true, e:"L'equatore passa per il nord del Brasile, in particolare vicino alla città di Macapá." },
+      { s:"Il punto più alto d'Europa è il Monte Bianco.", a:false, e:"Secondo la definizione più comune, è il monte Elbrus (Russia/Caucaso) la vetta più alta d'Europa." },
+      { s:"Singapore è allo stesso tempo una città e un paese.", a:true, e:"Singapore è una città-stato: la sua capitale e il suo territorio nazionale coincidono." }
+    ],
+    landmarks:[
+      { d:"🗼 Un'alta torre di ferro costruita per un'esposizione universale, in riva a un fiume.", a:"Francia", opts:["Francia","Italia","Spagna","Germania"] },
+      { d:"🏛️ Un immenso anfiteatro antico a forma di ellisse, dove si svolgevano combattimenti.", a:"Italia", opts:["Italia","Grecia","Turchia","Egitto"] },
+      { d:"🕌 Un mausoleo di marmo bianco costruito da un imperatore per sua moglie.", a:"India", opts:["India","Pakistan","Iran","Turchia"] },
+      { d:"🏔️ Un'antica città inca arroccata in alto tra le montagne.", a:"Perù", opts:["Perù","Cile","Bolivia","Ecuador"] },
+      { d:"🐫 Immense piramidi vecchie di oltre 4000 anni, vicino a un grande fiume.", a:"Egitto", opts:["Egitto","Sudan","Marocco","Giordania"] },
+      { d:"🗽 Una statua gigante che regge una torcia, donata come regalo tra due paesi.", a:"Stati Uniti", opts:["Stati Uniti","Canada","Francia","Regno Unito"] },
+      { d:"🏯 Una lunghissima muraglia di pietra che attraversa tutto il nord del paese.", a:"Cina", opts:["Cina","Mongolia","Corea del Sud","Giappone"] },
+      { d:"🎭 Un teatro dell'opera a forma di grandi vele bianche, costruito sull'acqua.", a:"Australia", opts:["Australia","Nuova Zelanda","Sudafrica","Canada"] },
+      { d:"⛩️ Una montagna vulcanica sacra, simbolo del paese, spesso raffigurata innevata.", a:"Giappone", opts:["Giappone","Corea del Sud","Cina","Filippine"] },
+      { d:"🏟️ Una famosa torre pendente, costruita per errore su un terreno troppo cedevole.", a:"Italia", opts:["Italia","Spagna","Francia","Portogallo"] }
+    ]
+  }
+};
 
-const TRUEFALSE = [
-  { s:"Le Nil est le fleuve le plus long du monde.", a:true, e:"Le Nil (environ 6 650 km) est traditionnellement considéré comme le plus long fleuve du monde." },
-  { s:"Le Sahara est le plus grand désert du monde, toutes catégories confondues.", a:false, e:"C'est le plus grand désert chaud, mais l'Antarctique — un désert froid — est en réalité le plus vaste désert du monde." },
-  { s:"L'Everest est le plus haut sommet du monde au-dessus du niveau de la mer.", a:true, e:"Avec 8 849 m, l'Everest est bien le plus haut sommet mesuré depuis le niveau de la mer." },
-  { s:"Le Canada compte plus de lacs qu'aucun autre pays au monde.", a:true, e:"Le Canada abrite environ 60% des lacs de la planète, grâce à son passé glaciaire." },
-  { s:"L'Australie est à la fois un pays et un continent.", a:true, e:"L'Australie est unique : elle forme son propre continent tout en étant un seul pays." },
-  { s:"La Grande Muraille de Chine est visible à l'œil nu depuis la Lune.", a:false, e:"C'est un mythe très répandu : depuis la Lune, aucune construction humaine n'est visible à l'œil nu." },
-  { s:"Le Vatican est le plus petit pays du monde.", a:true, e:"Avec environ 0,49 km², le Vatican est bien le plus petit État souverain du monde." },
-  { s:"L'océan Pacifique est le plus grand océan du monde.", a:true, e:"Le Pacifique couvre à lui seul près d'un tiers de la surface de la Terre." },
-  { s:"Le mont Kilimandjaro se trouve en Afrique.", a:true, e:"Le Kilimandjaro, plus haut sommet d'Afrique, se situe en Tanzanie." },
-  { s:"La mer Morte est le point le plus bas de la surface terrestre accessible.", a:true, e:"Sa surface se situe à environ 430 m sous le niveau de la mer." },
-  { s:"L'Amazonie abrite la plus grande forêt tropicale du monde.", a:true, e:"La forêt amazonienne est la plus vaste forêt tropicale de la planète." },
-  { s:"Le Groenland est officiellement un continent.", a:false, e:"Le Groenland est la plus grande île du monde, mais ce n'est pas un continent." },
-  { s:"La Russie s'étend sur deux continents, l'Europe et l'Asie.", a:true, e:"La Russie est un pays transcontinental, à cheval sur l'Europe et l'Asie." },
-  { s:"L'équateur traverse le Brésil.", a:true, e:"L'équateur passe par le nord du Brésil, notamment près de la ville de Macapá." },
-  { s:"Le point culminant de l'Europe est le Mont Blanc.", a:false, e:"Selon la définition la plus courante, c'est le mont Elbrouz (Russie/Caucase) qui est le plus haut sommet d'Europe." },
-  { s:"Singapour est à la fois une ville et un pays.", a:true, e:"Singapour est une cité-État : sa capitale et son territoire national se confondent." }
-];
-
-const LANDMARKS = [
-  { d:"🗼 Une haute tour de fer construite pour une exposition universelle, au bord d'un fleuve.", a:"France", opts:["France","Italie","Espagne","Allemagne"] },
-  { d:"🏛️ Un immense amphithéâtre antique en forme d'ellipse, où avaient lieu des combats.", a:"Italie", opts:["Italie","Grèce","Turquie","Égypte"] },
-  { d:"🕌 Un mausolée de marbre blanc construit par un empereur pour son épouse.", a:"Inde", opts:["Inde","Pakistan","Iran","Turquie"] },
-  { d:"🏔️ Une ancienne cité inca perchée en haut des montagnes.", a:"Pérou", opts:["Pérou","Chili","Bolivie","Équateur"] },
-  { d:"🐫 D'immenses pyramides vieilles de plus de 4000 ans, près d'un grand fleuve.", a:"Égypte", opts:["Égypte","Soudan","Maroc","Jordanie"] },
-  { d:"🗽 Une statue géante tenant une torche, offerte en cadeau entre deux pays.", a:"États-Unis", opts:["États-Unis","Canada","France","Royaume-Uni"] },
-  { d:"🏯 Une très longue muraille de pierre qui traverse tout le nord du pays.", a:"Chine", opts:["Chine","Mongolie","Corée du Sud","Japon"] },
-  { d:"🎭 Un opéra en forme de grandes voiles blanches, construit au bord de l'eau.", a:"Australie", opts:["Australie","Nouvelle-Zélande","Afrique du Sud","Canada"] },
-  { d:"⛩️ Un mont sacré et volcanique, symbole du pays, souvent peint enneigé.", a:"Japon", opts:["Japon","Corée du Sud","Chine","Philippines"] },
-  { d:"🏟️ Une tour penchée célèbre, construite par erreur sur un sol trop mou.", a:"Italie", opts:["Italie","Espagne","France","Portugal"] }
-];
+let currentLang = localStorage.getItem('geoGameLang') || 'fr';
+function tr(){ return I18N[currentLang]; }
 
 const STORAGE_KEY = "geo11_14_best_";
 let allQuestions = [];
@@ -160,19 +427,23 @@ function shuffle(arr){
 }
 
 function buildCapitalQ(){
-  const [country, capital, flag] = shuffle(CAPITALS)[0];
-  const distractors = shuffle(CAPITALS.map(c => c[1]).filter(c => c !== capital)).slice(0,3);
-  return { type:'capital', emoji: flag, text: "Quelle est la capitale de " + country + " ?", options: shuffle([capital, ...distractors]), correct: capital };
+  const capitals = tr().capitals;
+  const [country, capital, flag] = shuffle(capitals)[0];
+  const distractors = shuffle(capitals.map(c => c[1]).filter(c => c !== capital)).slice(0,3);
+  return { type:'capital', emoji: flag, text: tr().questionText(country), options: shuffle([capital, ...distractors]), correct: capital };
 }
 function buildTrueFalseQ(used){
+  const truefalse = tr().truefalse;
   let item;
-  do { item = shuffle(TRUEFALSE)[0]; } while (used.has(item.s) && used.size < TRUEFALSE.length);
+  do { item = shuffle(truefalse)[0]; } while (used.has(item.s) && used.size < truefalse.length);
   used.add(item.s);
-  return { type:'tf', emoji:'🤔', text: item.s, options: ['Vrai','Faux'], correct: item.a ? 'Vrai' : 'Faux', explain: item.e };
+  const [trueLabel, falseLabel] = tr().tfOptions;
+  return { type:'tf', emoji:'🤔', text: item.s, options: [trueLabel, falseLabel], correct: item.a ? trueLabel : falseLabel, explain: item.e };
 }
 function buildLandmarkQ(used){
+  const landmarks = tr().landmarks;
   let item;
-  do { item = shuffle(LANDMARKS)[0]; } while (used.has(item.d) && used.size < LANDMARKS.length);
+  do { item = shuffle(landmarks)[0]; } while (used.has(item.d) && used.size < landmarks.length);
   used.add(item.d);
   return { type:'landmark', emoji: item.d.split(' ')[0], text: item.d.substring(item.d.indexOf(' ')+1), options: shuffle(item.opts), correct: item.a };
 }
@@ -208,14 +479,13 @@ function startQuiz(len){
   renderQuestion();
 }
 
-const TYPE_LABEL = { capital:'🧭 Capitale', tf:'🤔 Vrai ou faux', landmark:'🗺️ Monument' };
-
 function renderQuestion(){
   answered = false;
   document.getElementById('nextBtn').style.display = 'none';
   const q = allQuestions[qi];
+  document.getElementById('qTypeLabel').textContent = tr().typeLabel[q.type];
+  document.getElementById('qWordLabel').textContent = tr().qWord;
   document.getElementById('qIndex').textContent = qi + 1;
-  document.getElementById('qType').innerHTML = TYPE_LABEL[q.type] + ' — Question <span id="qIndexInner">' + (qi+1) + '</span> / ' + allQuestions.length;
   document.getElementById('qEmoji').textContent = q.emoji;
   document.getElementById('qText').textContent = q.text;
   document.getElementById('scoreVal').textContent = score;
@@ -244,13 +514,13 @@ function selectAnswer(btn, chosen, q){
   if (chosen === q.correct){
     btn.classList.add('correct');
     score++; streak++;
-    feedback.textContent = '✅ Exact ! ' + (q.explain ? q.explain : '');
+    feedback.textContent = tr().feedbackOk(q.explain);
     feedback.className = 'feedback-msg ok';
   } else {
     btn.classList.add('wrong');
     streak = 0;
     document.querySelectorAll('.choice-btn').forEach(b => { if (b.textContent === q.correct) b.classList.add('reveal'); });
-    feedback.textContent = '❌ Réponse : ' + q.correct + (q.explain ? '. ' + q.explain : '');
+    feedback.textContent = tr().feedbackNo(q.correct, q.explain);
     feedback.className = 'feedback-msg no';
   }
   document.getElementById('scoreVal').textContent = score;
@@ -280,13 +550,9 @@ function endQuiz(){
   const total = allQuestions.length;
   document.getElementById('resultScoreText').textContent = score + ' / ' + total + '  (' + timer + ' s)';
 
-  let badge = '🥉', msg = 'Bon départ, continue à explorer la planète !';
   const ratio = score / total;
-  if (ratio === 1){ badge = '💎'; msg = 'Score parfait ! Tu es un·e expert·e en géographie mondiale.'; }
-  else if (ratio >= 0.8){ badge = '🥇'; msg = 'Excellent ! Ta culture géo est impressionnante.'; }
-  else if (ratio >= 0.6){ badge = '🥈'; msg = "Bien joué, encore un peu d'entraînement pour l'or !"; }
-  document.getElementById('resultBadge').textContent = badge;
-  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultBadge').textContent = tr().resultBadge(ratio);
+  document.getElementById('resultMsg').textContent = tr().resultMsg(ratio);
 
   const key = STORAGE_KEY + roundLen;
   let best = 0;
@@ -295,7 +561,7 @@ function endQuiz(){
     best = score;
     try { localStorage.setItem(key, String(best)); } catch(e){}
   }
-  document.getElementById('resultBest').textContent = 'Meilleur score (défi ' + total + ' questions) : ' + best + ' / ' + total;
+  document.getElementById('resultBest').textContent = tr().bestPrefix(total, best);
 }
 
 document.querySelectorAll('.mode-card').forEach(card => {
@@ -305,6 +571,66 @@ document.getElementById('playAgainBtn').addEventListener('click', () => {
   resultScreen.style.display = 'none';
   modeSelect.style.display = 'block';
 });
+
+function updateStaticText(){
+  document.documentElement.lang = currentLang;
+  document.title = tr().docTitle;
+  document.getElementById('navHome').textContent = tr().navHome;
+  document.getElementById('nav36').textContent = tr().nav36;
+  document.getElementById('nav710').textContent = tr().nav710;
+  document.getElementById('nav1114').textContent = tr().nav1114;
+  document.getElementById('heroTitle').textContent = tr().heroTitle;
+  document.getElementById('heroTagline').textContent = tr().heroTagline;
+  document.getElementById('introText').textContent = tr().introText;
+  document.getElementById('mode1Title').textContent = tr().mode1Title;
+  document.getElementById('mode1Sub').textContent = '8 ' + tr().questionsSuffix;
+  document.getElementById('mode2Title').textContent = tr().mode2Title;
+  document.getElementById('mode2Sub').textContent = '12 ' + tr().questionsSuffix;
+  document.getElementById('mode3Title').textContent = tr().mode3Title;
+  document.getElementById('mode3Sub').textContent = '16 ' + tr().questionsSuffix;
+  document.getElementById('scoreLabel').textContent = tr().scoreLabel;
+  document.getElementById('streakLabel').textContent = tr().streakLabel;
+  document.getElementById('nextBtn').textContent = tr().nextBtn;
+  document.getElementById('playAgainBtn').textContent = tr().playAgainBtn;
+  document.getElementById('footerText').innerHTML = tr().footer;
+
+  if (quizScreen.style.display !== 'none' && allQuestions.length){
+    modeSelect.style.display = 'block';
+    quizScreen.style.display = 'none';
+    resultScreen.style.display = 'none';
+    clearInterval(timerHandle);
+  } else if (resultScreen.style.display !== 'none' && allQuestions.length){
+    const total = allQuestions.length;
+    const ratio = score / total;
+    document.getElementById('resultBadge').textContent = tr().resultBadge(ratio);
+    document.getElementById('resultMsg').textContent = tr().resultMsg(ratio);
+    const key = STORAGE_KEY + roundLen;
+    let best = 0;
+    try { best = parseInt(localStorage.getItem(key) || '0', 10); } catch(e){ best = 0; }
+    document.getElementById('resultBest').textContent = tr().bestPrefix(total, best);
+  }
+}
+
+(function(){
+  const container = document.getElementById('langSwitcher');
+  const langs = ['fr','en','es','de','it'];
+  langs.forEach(lang => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn' + (lang === currentLang ? ' active' : '');
+    btn.dataset.lang = lang;
+    btn.textContent = lang.toUpperCase();
+    btn.addEventListener('click', () => {
+      currentLang = lang;
+      localStorage.setItem('geoGameLang', lang);
+      container.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateStaticText();
+    });
+    container.appendChild(btn);
+  });
+})();
+
+updateStaticText();
 </script>
 
 </body>

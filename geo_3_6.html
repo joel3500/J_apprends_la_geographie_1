@@ -18,10 +18,10 @@
   "description": "Jeu éducatif gratuit pour découvrir les continents et leurs animaux en s'amusant, dès 3 ans.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any (navigateur web)",
-  "inLanguage": ["fr"],
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
   "audience": { "@type": "PeopleAudience", "suggestedMinAge": 3 },
+  "inLanguage": ["fr","en","es","de","it"],
   "author": { "@type": "Person", "name": "Joel Sandé" }
 }
 </script>
@@ -29,18 +29,19 @@
 <body>
 
 <nav class="page-nav" aria-label="Choisir une tranche d'âge">
-  <a href="index.html">🏠 Accueil</a>
-  <a href="geo_3_6.html" aria-current="page">🐣 3-6 ans</a>
-  <a href="geo_7_10.html">🧭 7-10 ans</a>
-  <a href="geo_11_14.html">🌐 11-14 ans</a>
+  <a href="index.html" id="navHome">🏠 Accueil</a>
+  <a href="geo_3_6.html" aria-current="page" id="nav36">🐣 3-6 ans</a>
+  <a href="geo_7_10.html" id="nav710">🧭 7-10 ans</a>
+  <a href="geo_11_14.html" id="nav1114">🌐 11-14 ans</a>
 </nav>
+<div id="langSwitcher"></div>
 
 <header class="hero">
-  <h1>🌍 J'explore le monde</h1>
-  <p class="tagline">Clique sur chaque continent pour découvrir son nom et l'ami animal qui y habite !</p>
+  <h1 id="heroTitle">🌍 J'explore le monde</h1>
+  <p class="tagline" id="heroTagline">Clique sur chaque continent pour découvrir son nom et l'ami animal qui y habite !</p>
   <div class="progress">
     <span class="stars" id="starsRow">☆☆☆☆☆☆</span>
-    <span class="count"><span id="foundCount">0</span> / 6 continents trouvés</span>
+    <span class="count"><span id="foundCount">0</span> <span id="foundLabel">/ 6 continents trouvés</span></span>
   </div>
 </header>
 
@@ -89,8 +90,8 @@
 </main>
 
 <div class="win-banner" id="winBanner">
-  <h2>🎉 Bravo, explorateur·rice !</h2>
-  <p>Tu as trouvé les 6 continents du monde !</p>
+  <h2 id="winTitle">🎉 Bravo, explorateur·rice !</h2>
+  <p id="winMsg">Tu as trouvé les 6 continents du monde !</p>
   <button class="pill primary" id="replayBtn">🔄 Rejouer</button>
 </div>
 
@@ -107,20 +108,113 @@
 </div>
 
 <footer>
-  <p>&copy; J'explore le monde — à but éducatif, dès 3 ans. Maternelle, garderie, jeunesse.<br>
+  <p id="footerText">&copy; J'explore le monde — à but éducatif, dès 3 ans. Maternelle, garderie, jeunesse.<br>
             Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean <br>
+            Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean) <br>
             Merci de partager massivement !</p>
 </footer>
 
 <script>
-const DATA = {
-  amerique:   { name: "Amérique",   emoji: "🦅", fact: "En Amérique, le grand aigle plane très haut dans le ciel !" },
-  europe:     { name: "Europe",     emoji: "🦊", fact: "En Europe, le petit renard vit dans les forêts près des vieux châteaux." },
-  afrique:    { name: "Afrique",    emoji: "🦁", fact: "En Afrique, le lion est le roi de la savane !" },
-  asie:       { name: "Asie",       emoji: "🐼", fact: "En Asie, le panda mange du bambou toute la journée." },
-  oceanie:    { name: "Océanie",    emoji: "🦘", fact: "En Océanie, le kangourou saute très très haut !" },
-  antarctique:{ name: "Antarctique",emoji: "🐧", fact: "En Antarctique, il fait très froid et le manchot adore ça !" }
+const I18N = {
+  fr:{
+    docTitle:"J'explore le monde — jeu éducatif de géographie (dès 3 ans)",
+    navHome:"🏠 Accueil", nav36:"🐣 3-6 ans", nav710:"🧭 7-10 ans", nav1114:"🌐 11-14 ans",
+    heroTitle:"🌍 J'explore le monde",
+    heroTagline:"Clique sur chaque continent pour découvrir son nom et l'ami animal qui y habite !",
+    foundLabel:"/ 6 continents trouvés",
+    winTitle:"🎉 Bravo, explorateur·rice !", winMsg:"Tu as trouvé les 6 continents du monde !",
+    replayBtn:"🔄 Rejouer", listenBtn:"🔊 Écouter", closeBtn:"Continuer",
+    speechLocale:"fr-FR",
+    footer:"&copy; J'explore le monde — à but éducatif, dès 3 ans. Maternelle, garderie, jeunesse.<br>Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean<br>Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean)<br>Merci de partager massivement !",
+    data:{
+      amerique:   { name: "Amérique",   emoji: "🦅", fact: "En Amérique, le grand aigle plane très haut dans le ciel !" },
+      europe:     { name: "Europe",     emoji: "🦊", fact: "En Europe, le petit renard vit dans les forêts près des vieux châteaux." },
+      afrique:    { name: "Afrique",    emoji: "🦁", fact: "En Afrique, le lion est le roi de la savane !" },
+      asie:       { name: "Asie",       emoji: "🐼", fact: "En Asie, le panda mange du bambou toute la journée." },
+      oceanie:    { name: "Océanie",    emoji: "🦘", fact: "En Océanie, le kangourou saute très très haut !" },
+      antarctique:{ name: "Antarctique",emoji: "🐧", fact: "En Antarctique, il fait très froid et le manchot adore ça !" }
+    }
+  },
+  en:{
+    docTitle:"I Explore the World — geography learning game (ages 3+)",
+    navHome:"🏠 Home", nav36:"🐣 3-6 yrs", nav710:"🧭 7-10 yrs", nav1114:"🌐 11-14 yrs",
+    heroTitle:"🌍 I Explore the World",
+    heroTagline:"Click each continent to discover its name and the animal friend who lives there!",
+    foundLabel:"/ 6 continents found",
+    winTitle:"🎉 Well done, explorer!", winMsg:"You found all 6 continents of the world!",
+    replayBtn:"🔄 Play again", listenBtn:"🔊 Listen", closeBtn:"Continue",
+    speechLocale:"en-US",
+    footer:"&copy; I Explore the World — for educational purposes, ages 3+. Preschool, daycare, kids.<br>Learning game made by Joel Sandé, Saguenay lac Saint-Jean<br>All rights reserved, copying strictly forbidden (created by Joel Sandé, Saguenay lac Saint-Jean)<br>Thank you for sharing widely!",
+    data:{
+      amerique:   { name: "America",   emoji: "🦅", fact: "In America, the great eagle soars high in the sky!" },
+      europe:     { name: "Europe",    emoji: "🦊", fact: "In Europe, the little fox lives in forests near old castles." },
+      afrique:    { name: "Africa",    emoji: "🦁", fact: "In Africa, the lion is the king of the savanna!" },
+      asie:       { name: "Asia",      emoji: "🐼", fact: "In Asia, the panda eats bamboo all day long." },
+      oceanie:    { name: "Oceania",   emoji: "🦘", fact: "In Oceania, the kangaroo jumps really really high!" },
+      antarctique:{ name: "Antarctica",emoji: "🐧", fact: "In Antarctica, it's very cold and the penguin loves it!" }
+    }
+  },
+  es:{
+    docTitle:"Exploro el mundo — juego educativo de geografía (desde 3 años)",
+    navHome:"🏠 Inicio", nav36:"🐣 3-6 años", nav710:"🧭 7-10 años", nav1114:"🌐 11-14 años",
+    heroTitle:"🌍 Exploro el mundo",
+    heroTagline:"¡Haz clic en cada continente para descubrir su nombre y el animal amigo que vive allí!",
+    foundLabel:"/ 6 continentes encontrados",
+    winTitle:"🎉 ¡Bien hecho, explorador·a!", winMsg:"¡Encontraste los 6 continentes del mundo!",
+    replayBtn:"🔄 Jugar de nuevo", listenBtn:"🔊 Escuchar", closeBtn:"Continuar",
+    speechLocale:"es-ES",
+    footer:"&copy; Exploro el mundo — con fines educativos, desde 3 años. Preescolar, guardería, infancia.<br>Juego educativo creado por Joel Sandé, Saguenay lac Saint-Jean<br>Todos los derechos reservados, copia estrictamente prohibida (creado por Joel Sandé, Saguenay lac Saint-Jean)<br>¡Gracias por compartir masivamente!",
+    data:{
+      amerique:   { name: "América",   emoji: "🦅", fact: "¡En América, la gran águila vuela muy alto en el cielo!" },
+      europe:     { name: "Europa",    emoji: "🦊", fact: "En Europa, el pequeño zorro vive en los bosques cerca de castillos antiguos." },
+      afrique:    { name: "África",    emoji: "🦁", fact: "¡En África, el león es el rey de la sabana!" },
+      asie:       { name: "Asia",      emoji: "🐼", fact: "En Asia, el panda come bambú todo el día." },
+      oceanie:    { name: "Oceanía",   emoji: "🦘", fact: "¡En Oceanía, el canguro salta muy muy alto!" },
+      antarctique:{ name: "Antártida", emoji: "🐧", fact: "¡En la Antártida hace mucho frío y al pingüino le encanta!" }
+    }
+  },
+  de:{
+    docTitle:"Ich entdecke die Welt — Geografie-Lernspiel (ab 3 Jahren)",
+    navHome:"🏠 Start", nav36:"🐣 3-6 Jahre", nav710:"🧭 7-10 Jahre", nav1114:"🌐 11-14 Jahre",
+    heroTitle:"🌍 Ich entdecke die Welt",
+    heroTagline:"Klicke auf jeden Kontinent, um seinen Namen und den dort lebenden Tierfreund zu entdecken!",
+    foundLabel:"/ 6 Kontinente gefunden",
+    winTitle:"🎉 Bravo, kleine·r Entdecker·in!", winMsg:"Du hast alle 6 Kontinente der Welt gefunden!",
+    replayBtn:"🔄 Nochmal spielen", listenBtn:"🔊 Anhören", closeBtn:"Weiter",
+    speechLocale:"de-DE",
+    footer:"&copy; Ich entdecke die Welt — zu Lernzwecken, ab 3 Jahren. Kindergarten, Kita, Kinder.<br>Lernspiel erstellt von Joel Sandé, Saguenay lac Saint-Jean<br>Alle Rechte vorbehalten, Kopieren strengstens untersagt (erstellt von Joel Sandé, Saguenay lac Saint-Jean)<br>Danke, dass ihr es fleißig teilt!",
+    data:{
+      amerique:   { name: "Amerika",  emoji: "🦅", fact: "In Amerika schwebt der große Adler hoch am Himmel!" },
+      europe:     { name: "Europa",   emoji: "🦊", fact: "In Europa lebt der kleine Fuchs in Wäldern in der Nähe alter Schlösser." },
+      afrique:    { name: "Afrika",   emoji: "🦁", fact: "In Afrika ist der Löwe der König der Savanne!" },
+      asie:       { name: "Asien",    emoji: "🐼", fact: "In Asien frisst der Panda den ganzen Tag Bambus." },
+      oceanie:    { name: "Ozeanien", emoji: "🦘", fact: "In Ozeanien springt das Känguru ganz, ganz hoch!" },
+      antarctique:{ name: "Antarktis",emoji: "🐧", fact: "In der Antarktis ist es sehr kalt, und der Pinguin liebt das!" }
+    }
+  },
+  it:{
+    docTitle:"Esploro il mondo — gioco educativo di geografia (dai 3 anni)",
+    navHome:"🏠 Home", nav36:"🐣 3-6 anni", nav710:"🧭 7-10 anni", nav1114:"🌐 11-14 anni",
+    heroTitle:"🌍 Esploro il mondo",
+    heroTagline:"Clicca su ogni continente per scoprire il suo nome e l'animale amico che ci vive!",
+    foundLabel:"/ 6 continenti trovati",
+    winTitle:"🎉 Bravo, esploratore/esploratrice!", winMsg:"Hai trovato tutti i 6 continenti del mondo!",
+    replayBtn:"🔄 Rigioca", listenBtn:"🔊 Ascolta", closeBtn:"Continua",
+    speechLocale:"it-IT",
+    footer:"&copy; Esploro il mondo — a scopo educativo, dai 3 anni. Materna, asilo, infanzia.<br>Gioco educativo creato da Joel Sandé, Saguenay lac Saint-Jean<br>Tutti i diritti riservati, copia rigorosamente vietata (creato da Joel Sandé, Saguenay lac Saint-Jean)<br>Grazie di condividerlo tantissimo!",
+    data:{
+      amerique:   { name: "America",  emoji: "🦅", fact: "In America, la grande aquila vola altissima nel cielo!" },
+      europe:     { name: "Europa",   emoji: "🦊", fact: "In Europa, la piccola volpe vive nei boschi vicino ai vecchi castelli." },
+      afrique:    { name: "Africa",   emoji: "🦁", fact: "In Africa, il leone è il re della savana!" },
+      asie:       { name: "Asia",     emoji: "🐼", fact: "In Asia, il panda mangia bambù tutto il giorno." },
+      oceanie:    { name: "Oceania",  emoji: "🦘", fact: "In Oceania, il canguro salta altissimo!" },
+      antarctique:{ name: "Antartide",emoji: "🐧", fact: "In Antartide fa molto freddo e al pinguino piace tantissimo!" }
+    }
+  }
 };
+
+let currentLang = localStorage.getItem('geoGameLang') || 'fr';
+function tr(){ return I18N[currentLang]; }
 
 const found = new Set();
 const overlay = document.getElementById('overlay');
@@ -140,7 +234,7 @@ if (!supportsSpeech) listenBtn.style.display = 'none';
 
 function openCard(id){
   currentId = id;
-  const d = DATA[id];
+  const d = tr().data[id];
   cardEmoji.textContent = d.emoji;
   cardTitle.textContent = d.name;
   cardFact.textContent = d.fact;
@@ -169,11 +263,44 @@ function updateProgress(){
 function speak(){
   if (!supportsSpeech || !currentId) return;
   window.speechSynthesis.cancel();
-  const d = DATA[currentId];
+  const d = tr().data[currentId];
   const u = new SpeechSynthesisUtterance(d.name + '. ' + d.fact);
-  u.lang = 'fr-FR';
+  u.lang = tr().speechLocale;
   u.rate = 0.95;
   window.speechSynthesis.speak(u);
+}
+
+function updateStaticText(){
+  document.documentElement.lang = currentLang;
+  document.title = tr().docTitle;
+  document.getElementById('navHome').textContent = tr().navHome;
+  document.getElementById('nav36').textContent = tr().nav36;
+  document.getElementById('nav710').textContent = tr().nav710;
+  document.getElementById('nav1114').textContent = tr().nav1114;
+  document.getElementById('heroTitle').textContent = tr().heroTitle;
+  document.getElementById('heroTagline').textContent = tr().heroTagline;
+  document.getElementById('foundLabel').textContent = tr().foundLabel;
+  document.getElementById('winTitle').textContent = tr().winTitle;
+  document.getElementById('winMsg').textContent = tr().winMsg;
+  replayBtn.textContent = tr().replayBtn;
+  listenBtn.textContent = tr().listenBtn;
+  closeBtn.textContent = tr().closeBtn;
+  document.getElementById('footerText').innerHTML = tr().footer;
+
+  Object.keys(tr().data).forEach(id => {
+    const g = document.querySelector('.continent[data-id="'+id+'"]');
+    if (!g) return;
+    g.setAttribute('aria-label', tr().data[id].name);
+    const label = g.querySelector('.label');
+    if (label) label.textContent = tr().data[id].name;
+  });
+
+  if (overlay.classList.contains('open') && currentId){
+    const d = tr().data[currentId];
+    cardEmoji.textContent = d.emoji;
+    cardTitle.textContent = d.name;
+    cardFact.textContent = d.fact;
+  }
 }
 
 function celebrate(){
@@ -214,6 +341,27 @@ overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCard()
 const styleTag = document.createElement('style');
 styleTag.textContent = '@keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity:.3; } }';
 document.head.appendChild(styleTag);
+
+(function(){
+  const container = document.getElementById('langSwitcher');
+  const langs = ['fr','en','es','de','it'];
+  langs.forEach(lang => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn' + (lang === currentLang ? ' active' : '');
+    btn.dataset.lang = lang;
+    btn.textContent = lang.toUpperCase();
+    btn.addEventListener('click', () => {
+      currentLang = lang;
+      localStorage.setItem('geoGameLang', lang);
+      container.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateStaticText();
+    });
+    container.appendChild(btn);
+  });
+})();
+
+updateStaticText();
 </script>
 
 </body>

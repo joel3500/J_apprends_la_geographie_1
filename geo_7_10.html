@@ -15,10 +15,10 @@
   "description": "Jeu éducatif gratuit pour apprendre les capitales et drapeaux du monde, dès 7 ans.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any (navigateur web)",
-  "inLanguage": ["fr"],
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
   "audience": { "@type": "PeopleAudience", "suggestedMinAge": 7 },
+  "inLanguage": ["fr","en","es","de","it"],
   "author": { "@type": "Person", "name": "Joel Sandé" }
 }
 </script>
@@ -26,15 +26,16 @@
 <body>
 
 <nav class="page-nav" aria-label="Choisir une tranche d'âge">
-  <a href="index.html">🏠 Accueil</a>
-  <a href="geo_3_6.html">🐣 3-6 ans</a>
-  <a href="geo_7_10.html" aria-current="page">🧭 7-10 ans</a>
-  <a href="geo_11_14.html">🌐 11-14 ans</a>
+  <a href="index.html" id="navHome">🏠 Accueil</a>
+  <a href="geo_3_6.html" id="nav36">🐣 3-6 ans</a>
+  <a href="geo_7_10.html" aria-current="page" id="nav710">🧭 7-10 ans</a>
+  <a href="geo_11_14.html" id="nav1114">🌐 11-14 ans</a>
 </nav>
+<div id="langSwitcher"></div>
 
 <header class="hero">
-  <h1>🧭 Le jeu des capitales</h1>
-  <p class="tagline">Associe chaque pays à sa capitale et deviens champion·ne de géographie !</p>
+  <h1 id="heroTitle">🧭 Le jeu des capitales</h1>
+  <p class="tagline" id="heroTagline">Associe chaque pays à sa capitale et deviens champion·ne de géographie !</p>
 </header>
 
 <main>
@@ -42,22 +43,22 @@
 
     <!-- Écran de sélection du niveau -->
     <div class="mode-select" id="modeSelect">
-      <p class="intro">Choisis ton niveau pour commencer :</p>
+      <p class="intro" id="introText">Choisis ton niveau pour commencer :</p>
       <div class="mode-grid">
         <button class="mode-card" data-level="facile">
           <span class="m-emoji">🌱</span>
-          <span class="m-title">Facile</span>
-          <span class="m-sub">Pays très connus</span>
+          <span class="m-title" id="mode1Title">Facile</span>
+          <span class="m-sub" id="mode1Sub">Pays très connus</span>
         </button>
         <button class="mode-card" data-level="moyen">
           <span class="m-emoji">🧩</span>
-          <span class="m-title">Moyen</span>
-          <span class="m-sub">Un peu plus de défi</span>
+          <span class="m-title" id="mode2Title">Moyen</span>
+          <span class="m-sub" id="mode2Sub">Un peu plus de défi</span>
         </button>
         <button class="mode-card" data-level="difficile">
           <span class="m-emoji">🔥</span>
-          <span class="m-title">Difficile</span>
-          <span class="m-sub">Pour les experts !</span>
+          <span class="m-title" id="mode3Title">Difficile</span>
+          <span class="m-sub" id="mode3Sub">Pour les experts !</span>
         </button>
       </div>
     </div>
@@ -65,13 +66,13 @@
     <!-- Écran de question -->
     <div id="quizScreen" style="display:none;">
       <div class="quiz-topbar">
-        <span class="quiz-stat">⭐ Score : <span id="scoreVal">0</span></span>
-        <span class="quiz-stat">🔥 Série : <span id="streakVal">0</span></span>
+        <span class="quiz-stat">⭐ <span id="scoreLabel">Score</span> : <span id="scoreVal">0</span></span>
+        <span class="quiz-stat">🔥 <span id="streakLabel">Série</span> : <span id="streakVal">0</span></span>
         <span class="quiz-stat">⏱️ <span id="timerVal">0</span> s</span>
       </div>
       <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
 
-      <p class="question-eyebrow">Question <span id="qIndex">1</span> / <span id="qTotal">8</span></p>
+      <p class="question-eyebrow"><span id="qLabel">Question</span> <span id="qIndex">1</span> / <span id="qTotal">8</span></p>
       <span class="question-flag" id="qFlag">🏳️</span>
       <p class="question-text" id="qText">Quelle est la capitale de... ?</p>
 
@@ -94,33 +95,145 @@
 </main>
 
 <footer>
-  <p>&copy; Le jeu des capitales — à but éducatif, dès 7 ans.            <br>
+  <p id="footerText">&copy; Le jeu des capitales — à but éducatif, dès 7 ans.            <br>
             Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean <br>
-            Merci de partager massivement !                              
+            Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean) <br>
+            Merci de partager massivement !
   </p>
 </footer>
 
 <script>
-const BANK = {
-  facile: [
-    ["France","Paris","🇫🇷"], ["Canada","Ottawa","🇨🇦"], ["Italie","Rome","🇮🇹"],
-    ["Japon","Tokyo","🇯🇵"], ["Espagne","Madrid","🇪🇸"], ["Allemagne","Berlin","🇩🇪"],
-    ["Brésil","Brasília","🇧🇷"], ["Égypte","Le Caire","🇪🇬"], ["Chine","Pékin","🇨🇳"],
-    ["Royaume-Uni","Londres","🇬🇧"], ["Mexique","Mexico","🇲🇽"], ["Russie","Moscou","🇷🇺"]
-  ],
-  moyen: [
-    ["Portugal","Lisbonne","🇵🇹"], ["Grèce","Athènes","🇬🇷"], ["Norvège","Oslo","🇳🇴"],
-    ["Maroc","Rabat","🇲🇦"], ["Kenya","Nairobi","🇰🇪"], ["Argentine","Buenos Aires","🇦🇷"],
-    ["Inde","New Delhi","🇮🇳"], ["Australie","Canberra","🇦🇺"], ["Suède","Stockholm","🇸🇪"],
-    ["Turquie","Ankara","🇹🇷"], ["Corée du Sud","Séoul","🇰🇷"], ["Pays-Bas","Amsterdam","🇳🇱"]
-  ],
-  difficile: [
-    ["Nouvelle-Zélande","Wellington","🇳🇿"], ["Vietnam","Hanoï","🇻🇳"], ["Islande","Reykjavik","🇮🇸"],
-    ["Finlande","Helsinki","🇫🇮"], ["Nigéria","Abuja","🇳🇬"], ["Chili","Santiago","🇨🇱"],
-    ["Pérou","Lima","🇵🇪"], ["Thaïlande","Bangkok","🇹🇭"], ["Ukraine","Kiev","🇺🇦"],
-    ["Suisse","Berne","🇨🇭"], ["Éthiopie","Addis-Abeba","🇪🇹"], ["Malaisie","Kuala Lumpur","🇲🇾"]
-  ]
+const I18N = {
+  fr:{
+    docTitle:"Le jeu des capitales — géographie 7-10 ans",
+    navHome:"🏠 Accueil", nav36:"🐣 3-6 ans", nav710:"🧭 7-10 ans", nav1114:"🌐 11-14 ans",
+    heroTitle:"🧭 Le jeu des capitales",
+    heroTagline:"Associe chaque pays à sa capitale et deviens champion·ne de géographie !",
+    introText:"Choisis ton niveau pour commencer :",
+    mode1Title:"Facile", mode1Sub:"Pays très connus",
+    mode2Title:"Moyen", mode2Sub:"Un peu plus de défi",
+    mode3Title:"Difficile", mode3Sub:"Pour les experts !",
+    scoreLabel:"Score", streakLabel:"Série", qLabel:"Question",
+    questionText:c => "Quelle est la capitale de " + c + " ?",
+    feedbackOk:"✅ Bravo, exact !",
+    feedbackNo:c => "❌ La bonne réponse était : " + c,
+    playAgainBtn:"🔄 Rejouer",
+    resultMsg:(ratio)=> ratio===1 ? 'Parfait ! Tu es un·e champion·ne des capitales !' : ratio>=0.75 ? 'Excellent travail, presque tout juste !' : ratio>=0.5 ? 'Bien joué, tu progresses bien !' : 'Bon début, continue à explorer le monde !',
+    resultBadge:(ratio)=> ratio===1?'🏆':ratio>=0.75?'🥇':ratio>=0.5?'🥈':'🥉',
+    levelLabel:{facile:"facile", moyen:"moyen", difficile:"difficile"},
+    bestPrefix:(lvl,best,total)=>"Meilleur score (niveau "+lvl+") : "+best+" / "+total,
+    footer:"&copy; Le jeu des capitales — à but éducatif, dès 7 ans.<br>Jeu éducatif produit par Joel Sandé, Saguenay lac Saint-Jean<br>Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean)<br>Merci de partager massivement !",
+    bank:{
+      facile:[["France","Paris","🇫🇷"],["Canada","Ottawa","🇨🇦"],["Italie","Rome","🇮🇹"],["Japon","Tokyo","🇯🇵"],["Espagne","Madrid","🇪🇸"],["Allemagne","Berlin","🇩🇪"],["Brésil","Brasília","🇧🇷"],["Égypte","Le Caire","🇪🇬"],["Chine","Pékin","🇨🇳"],["Royaume-Uni","Londres","🇬🇧"],["Mexique","Mexico","🇲🇽"],["Russie","Moscou","🇷🇺"]],
+      moyen:[["Portugal","Lisbonne","🇵🇹"],["Grèce","Athènes","🇬🇷"],["Norvège","Oslo","🇳🇴"],["Maroc","Rabat","🇲🇦"],["Kenya","Nairobi","🇰🇪"],["Argentine","Buenos Aires","🇦🇷"],["Inde","New Delhi","🇮🇳"],["Australie","Canberra","🇦🇺"],["Suède","Stockholm","🇸🇪"],["Turquie","Ankara","🇹🇷"],["Corée du Sud","Séoul","🇰🇷"],["Pays-Bas","Amsterdam","🇳🇱"]],
+      difficile:[["Nouvelle-Zélande","Wellington","🇳🇿"],["Vietnam","Hanoï","🇻🇳"],["Islande","Reykjavik","🇮🇸"],["Finlande","Helsinki","🇫🇮"],["Nigéria","Abuja","🇳🇬"],["Chili","Santiago","🇨🇱"],["Pérou","Lima","🇵🇪"],["Thaïlande","Bangkok","🇹🇭"],["Ukraine","Kiev","🇺🇦"],["Suisse","Berne","🇨🇭"],["Éthiopie","Addis-Abeba","🇪🇹"],["Malaisie","Kuala Lumpur","🇲🇾"]]
+    }
+  },
+  en:{
+    docTitle:"The capitals game — geography ages 7-10",
+    navHome:"🏠 Home", nav36:"🐣 3-6 yrs", nav710:"🧭 7-10 yrs", nav1114:"🌐 11-14 yrs",
+    heroTitle:"🧭 The capitals game",
+    heroTagline:"Match each country to its capital and become a geography champion!",
+    introText:"Choose your level to start:",
+    mode1Title:"Easy", mode1Sub:"Well-known countries",
+    mode2Title:"Medium", mode2Sub:"A bit more of a challenge",
+    mode3Title:"Hard", mode3Sub:"For experts!",
+    scoreLabel:"Score", streakLabel:"Streak", qLabel:"Question",
+    questionText:c => "What is the capital of " + c + "?",
+    feedbackOk:"✅ Well done, correct!",
+    feedbackNo:c => "❌ The correct answer was: " + c,
+    playAgainBtn:"🔄 Play again",
+    resultMsg:(ratio)=> ratio===1 ? 'Perfect! You are a capitals champion!' : ratio>=0.75 ? 'Excellent work, almost flawless!' : ratio>=0.5 ? 'Well done, you are making good progress!' : 'Good start, keep exploring the world!',
+    resultBadge:(ratio)=> ratio===1?'🏆':ratio>=0.75?'🥇':ratio>=0.5?'🥈':'🥉',
+    levelLabel:{facile:"easy", moyen:"medium", difficile:"hard"},
+    bestPrefix:(lvl,best,total)=>"Best score ("+lvl+" level): "+best+" / "+total,
+    footer:"&copy; The capitals game — for educational purposes, ages 7+.<br>Learning game made by Joel Sandé, Saguenay lac Saint-Jean<br>All rights reserved, copying strictly forbidden (created by Joel Sandé, Saguenay lac Saint-Jean)<br>Thank you for sharing widely!",
+    bank:{
+      facile:[["France","Paris","🇫🇷"],["Canada","Ottawa","🇨🇦"],["Italy","Rome","🇮🇹"],["Japan","Tokyo","🇯🇵"],["Spain","Madrid","🇪🇸"],["Germany","Berlin","🇩🇪"],["Brazil","Brasília","🇧🇷"],["Egypt","Cairo","🇪🇬"],["China","Beijing","🇨🇳"],["United Kingdom","London","🇬🇧"],["Mexico","Mexico City","🇲🇽"],["Russia","Moscow","🇷🇺"]],
+      moyen:[["Portugal","Lisbon","🇵🇹"],["Greece","Athens","🇬🇷"],["Norway","Oslo","🇳🇴"],["Morocco","Rabat","🇲🇦"],["Kenya","Nairobi","🇰🇪"],["Argentina","Buenos Aires","🇦🇷"],["India","New Delhi","🇮🇳"],["Australia","Canberra","🇦🇺"],["Sweden","Stockholm","🇸🇪"],["Turkey","Ankara","🇹🇷"],["South Korea","Seoul","🇰🇷"],["Netherlands","Amsterdam","🇳🇱"]],
+      difficile:[["New Zealand","Wellington","🇳🇿"],["Vietnam","Hanoi","🇻🇳"],["Iceland","Reykjavik","🇮🇸"],["Finland","Helsinki","🇫🇮"],["Nigeria","Abuja","🇳🇬"],["Chile","Santiago","🇨🇱"],["Peru","Lima","🇵🇪"],["Thailand","Bangkok","🇹🇭"],["Ukraine","Kyiv","🇺🇦"],["Switzerland","Bern","🇨🇭"],["Ethiopia","Addis Ababa","🇪🇹"],["Malaysia","Kuala Lumpur","🇲🇾"]]
+    }
+  },
+  es:{
+    docTitle:"El juego de las capitales — geografía 7-10 años",
+    navHome:"🏠 Inicio", nav36:"🐣 3-6 años", nav710:"🧭 7-10 años", nav1114:"🌐 11-14 años",
+    heroTitle:"🧭 El juego de las capitales",
+    heroTagline:"Asocia cada país con su capital y conviértete en campeón/a de geografía.",
+    introText:"Elige tu nivel para empezar:",
+    mode1Title:"Fácil", mode1Sub:"Países muy conocidos",
+    mode2Title:"Medio", mode2Sub:"Un poco más de desafío",
+    mode3Title:"Difícil", mode3Sub:"¡Para expertos!",
+    scoreLabel:"Puntos", streakLabel:"Racha", qLabel:"Pregunta",
+    questionText:c => "¿Cuál es la capital de " + c + "?",
+    feedbackOk:"✅ ¡Bien hecho, correcto!",
+    feedbackNo:c => "❌ La respuesta correcta era: " + c,
+    playAgainBtn:"🔄 Jugar de nuevo",
+    resultMsg:(ratio)=> ratio===1 ? '¡Perfecto! ¡Eres un campeón/a de las capitales!' : ratio>=0.75 ? '¡Excelente trabajo, casi perfecto!' : ratio>=0.5 ? '¡Bien hecho, estás progresando!' : '¡Buen comienzo, sigue explorando el mundo!',
+    resultBadge:(ratio)=> ratio===1?'🏆':ratio>=0.75?'🥇':ratio>=0.5?'🥈':'🥉',
+    levelLabel:{facile:"fácil", moyen:"medio", difficile:"difícil"},
+    bestPrefix:(lvl,best,total)=>"Mejor puntuación (nivel "+lvl+"): "+best+" / "+total,
+    footer:"&copy; El juego de las capitales — con fines educativos, desde 7 años.<br>Juego educativo creado por Joel Sandé, Saguenay lac Saint-Jean<br>Todos los derechos reservados, copia estrictamente prohibida (creado por Joel Sandé, Saguenay lac Saint-Jean)<br>¡Gracias por compartir masivamente!",
+    bank:{
+      facile:[["Francia","París","🇫🇷"],["Canadá","Ottawa","🇨🇦"],["Italia","Roma","🇮🇹"],["Japón","Tokio","🇯🇵"],["España","Madrid","🇪🇸"],["Alemania","Berlín","🇩🇪"],["Brasil","Brasilia","🇧🇷"],["Egipto","El Cairo","🇪🇬"],["China","Pekín","🇨🇳"],["Reino Unido","Londres","🇬🇧"],["México","Ciudad de México","🇲🇽"],["Rusia","Moscú","🇷🇺"]],
+      moyen:[["Portugal","Lisboa","🇵🇹"],["Grecia","Atenas","🇬🇷"],["Noruega","Oslo","🇳🇴"],["Marruecos","Rabat","🇲🇦"],["Kenia","Nairobi","🇰🇪"],["Argentina","Buenos Aires","🇦🇷"],["India","Nueva Delhi","🇮🇳"],["Australia","Canberra","🇦🇺"],["Suecia","Estocolmo","🇸🇪"],["Turquía","Ankara","🇹🇷"],["Corea del Sur","Seúl","🇰🇷"],["Países Bajos","Ámsterdam","🇳🇱"]],
+      difficile:[["Nueva Zelanda","Wellington","🇳🇿"],["Vietnam","Hanói","🇻🇳"],["Islandia","Reikiavik","🇮🇸"],["Finlandia","Helsinki","🇫🇮"],["Nigeria","Abuya","🇳🇬"],["Chile","Santiago","🇨🇱"],["Perú","Lima","🇵🇪"],["Tailandia","Bangkok","🇹🇭"],["Ucrania","Kiev","🇺🇦"],["Suiza","Berna","🇨🇭"],["Etiopía","Adís Abeba","🇪🇹"],["Malasia","Kuala Lumpur","🇲🇾"]]
+    }
+  },
+  de:{
+    docTitle:"Das Hauptstädte-Spiel — Geografie 7-10 Jahre",
+    navHome:"🏠 Start", nav36:"🐣 3-6 Jahre", nav710:"🧭 7-10 Jahre", nav1114:"🌐 11-14 Jahre",
+    heroTitle:"🧭 Das Hauptstädte-Spiel",
+    heroTagline:"Ordne jedem Land seine Hauptstadt zu und werde Geografie-Champion!",
+    introText:"Wähle dein Niveau, um zu beginnen:",
+    mode1Title:"Leicht", mode1Sub:"Sehr bekannte Länder",
+    mode2Title:"Mittel", mode2Sub:"Etwas mehr Herausforderung",
+    mode3Title:"Schwer", mode3Sub:"Für Experten!",
+    scoreLabel:"Punkte", streakLabel:"Serie", qLabel:"Frage",
+    questionText:c => "Was ist die Hauptstadt von " + c + "?",
+    feedbackOk:"✅ Bravo, richtig!",
+    feedbackNo:c => "❌ Die richtige Antwort war: " + c,
+    playAgainBtn:"🔄 Nochmal spielen",
+    resultMsg:(ratio)=> ratio===1 ? 'Perfekt! Du bist ein Hauptstädte-Champion!' : ratio>=0.75 ? 'Ausgezeichnete Arbeit, fast alles richtig!' : ratio>=0.5 ? 'Gut gemacht, du machst gute Fortschritte!' : 'Guter Anfang, erkunde die Welt weiter!',
+    resultBadge:(ratio)=> ratio===1?'🏆':ratio>=0.75?'🥇':ratio>=0.5?'🥈':'🥉',
+    levelLabel:{facile:"leicht", moyen:"mittel", difficile:"schwer"},
+    bestPrefix:(lvl,best,total)=>"Bestwert (Niveau "+lvl+"): "+best+" / "+total,
+    footer:"&copy; Das Hauptstädte-Spiel — zu Lernzwecken, ab 7 Jahren.<br>Lernspiel erstellt von Joel Sandé, Saguenay lac Saint-Jean<br>Alle Rechte vorbehalten, Kopieren strengstens untersagt (erstellt von Joel Sandé, Saguenay lac Saint-Jean)<br>Danke, dass ihr es fleißig teilt!",
+    bank:{
+      facile:[["Frankreich","Paris","🇫🇷"],["Kanada","Ottawa","🇨🇦"],["Italien","Rom","🇮🇹"],["Japan","Tokio","🇯🇵"],["Spanien","Madrid","🇪🇸"],["Deutschland","Berlin","🇩🇪"],["Brasilien","Brasília","🇧🇷"],["Ägypten","Kairo","🇪🇬"],["China","Peking","🇨🇳"],["Vereinigtes Königreich","London","🇬🇧"],["Mexiko","Mexiko-Stadt","🇲🇽"],["Russland","Moskau","🇷🇺"]],
+      moyen:[["Portugal","Lissabon","🇵🇹"],["Griechenland","Athen","🇬🇷"],["Norwegen","Oslo","🇳🇴"],["Marokko","Rabat","🇲🇦"],["Kenia","Nairobi","🇰🇪"],["Argentinien","Buenos Aires","🇦🇷"],["Indien","Neu-Delhi","🇮🇳"],["Australien","Canberra","🇦🇺"],["Schweden","Stockholm","🇸🇪"],["Türkei","Ankara","🇹🇷"],["Südkorea","Seoul","🇰🇷"],["Niederlande","Amsterdam","🇳🇱"]],
+      difficile:[["Neuseeland","Wellington","🇳🇿"],["Vietnam","Hanoi","🇻🇳"],["Island","Reykjavik","🇮🇸"],["Finnland","Helsinki","🇫🇮"],["Nigeria","Abuja","🇳🇬"],["Chile","Santiago","🇨🇱"],["Peru","Lima","🇵🇪"],["Thailand","Bangkok","🇹🇭"],["Ukraine","Kiew","🇺🇦"],["Schweiz","Bern","🇨🇭"],["Äthiopien","Addis Abeba","🇪🇹"],["Malaysia","Kuala Lumpur","🇲🇾"]]
+    }
+  },
+  it:{
+    docTitle:"Il gioco delle capitali — geografia 7-10 anni",
+    navHome:"🏠 Home", nav36:"🐣 3-6 anni", nav710:"🧭 7-10 anni", nav1114:"🌐 11-14 anni",
+    heroTitle:"🧭 Il gioco delle capitali",
+    heroTagline:"Abbina ogni paese alla sua capitale e diventa un campione di geografia!",
+    introText:"Scegli il tuo livello per iniziare:",
+    mode1Title:"Facile", mode1Sub:"Paesi molto conosciuti",
+    mode2Title:"Medio", mode2Sub:"Un po' più di sfida",
+    mode3Title:"Difficile", mode3Sub:"Per esperti!",
+    scoreLabel:"Punti", streakLabel:"Serie", qLabel:"Domanda",
+    questionText:c => "Qual è la capitale di " + c + "?",
+    feedbackOk:"✅ Bravo, esatto!",
+    feedbackNo:c => "❌ La risposta corretta era: " + c,
+    playAgainBtn:"🔄 Rigioca",
+    resultMsg:(ratio)=> ratio===1 ? 'Perfetto! Sei un campione delle capitali!' : ratio>=0.75 ? 'Ottimo lavoro, quasi tutto giusto!' : ratio>=0.5 ? 'Ben fatto, stai facendo buoni progressi!' : 'Buon inizio, continua a esplorare il mondo!',
+    resultBadge:(ratio)=> ratio===1?'🏆':ratio>=0.75?'🥇':ratio>=0.5?'🥈':'🥉',
+    levelLabel:{facile:"facile", moyen:"medio", difficile:"difficile"},
+    bestPrefix:(lvl,best,total)=>"Miglior punteggio (livello "+lvl+"): "+best+" / "+total,
+    footer:"&copy; Il gioco delle capitali — a scopo educativo, dai 7 anni.<br>Gioco educativo creato da Joel Sandé, Saguenay lac Saint-Jean<br>Tutti i diritti riservati, copia rigorosamente vietata (creato da Joel Sandé, Saguenay lac Saint-Jean)<br>Grazie di condividerlo tantissimo!",
+    bank:{
+      facile:[["Francia","Parigi","🇫🇷"],["Canada","Ottawa","🇨🇦"],["Italia","Roma","🇮🇹"],["Giappone","Tokyo","🇯🇵"],["Spagna","Madrid","🇪🇸"],["Germania","Berlino","🇩🇪"],["Brasile","Brasília","🇧🇷"],["Egitto","Il Cairo","🇪🇬"],["Cina","Pechino","🇨🇳"],["Regno Unito","Londra","🇬🇧"],["Messico","Città del Messico","🇲🇽"],["Russia","Mosca","🇷🇺"]],
+      moyen:[["Portogallo","Lisbona","🇵🇹"],["Grecia","Atene","🇬🇷"],["Norvegia","Oslo","🇳🇴"],["Marocco","Rabat","🇲🇦"],["Kenya","Nairobi","🇰🇪"],["Argentina","Buenos Aires","🇦🇷"],["India","Nuova Delhi","🇮🇳"],["Australia","Canberra","🇦🇺"],["Svezia","Stoccolma","🇸🇪"],["Turchia","Ankara","🇹🇷"],["Corea del Sud","Seul","🇰🇷"],["Paesi Bassi","Amsterdam","🇳🇱"]],
+      difficile:[["Nuova Zelanda","Wellington","🇳🇿"],["Vietnam","Hanoi","🇻🇳"],["Islanda","Reykjavik","🇮🇸"],["Finlandia","Helsinki","🇫🇮"],["Nigeria","Abuja","🇳🇬"],["Cile","Santiago","🇨🇱"],["Perù","Lima","🇵🇪"],["Thailandia","Bangkok","🇹🇭"],["Ucraina","Kiev","🇺🇦"],["Svizzera","Berna","🇨🇭"],["Etiopia","Addis Abeba","🇪🇹"],["Malesia","Kuala Lumpur","🇲🇾"]]
+    }
+  }
 };
+
+let currentLang = localStorage.getItem('geoGameLang') || 'fr';
+function tr(){ return I18N[currentLang]; }
+
 const QUESTIONS_PER_ROUND = 8;
 const STORAGE_KEY = "geo7_10_best_";
 
@@ -147,7 +260,7 @@ function shuffle(arr){
 }
 
 function buildQuestions(lvl){
-  const pool = BANK[lvl];
+  const pool = tr().bank[lvl];
   const chosen = shuffle(pool).slice(0, QUESTIONS_PER_ROUND);
   const allCapitals = pool.map(p => p[1]);
   return chosen.map(([country, capital, flag]) => {
@@ -181,7 +294,7 @@ function renderQuestion(){
   const q = questions[qi];
   document.getElementById('qIndex').textContent = qi + 1;
   document.getElementById('qFlag').textContent = q.flag;
-  document.getElementById('qText').textContent = "Quelle est la capitale de " + q.country + " ?";
+  document.getElementById('qText').textContent = tr().questionText(q.country);
   document.getElementById('scoreVal').textContent = score;
   document.getElementById('streakVal').textContent = streak;
   document.getElementById('feedback').textContent = '';
@@ -209,13 +322,13 @@ function selectAnswer(btn, chosen, correct){
   if (chosen === correct){
     btn.classList.add('correct');
     score++; streak++;
-    feedback.textContent = '✅ Bravo, exact !';
+    feedback.textContent = tr().feedbackOk;
     feedback.className = 'feedback-msg ok';
   } else {
     btn.classList.add('wrong');
     streak = 0;
     buttons.forEach(b => { if (b.textContent === correct) b.classList.add('reveal'); });
-    feedback.textContent = '❌ La bonne réponse était : ' + correct;
+    feedback.textContent = tr().feedbackNo(correct);
     feedback.className = 'feedback-msg no';
   }
 
@@ -237,13 +350,9 @@ function endQuiz(){
   const total = questions.length;
   document.getElementById('resultScoreText').textContent = score + ' / ' + total + '  (' + timer + ' s)';
 
-  let badge = '🥉', msg = 'Bon début, continue à explorer le monde !';
   const ratio = score / total;
-  if (ratio === 1){ badge = '🏆'; msg = 'Parfait ! Tu es un·e champion·ne des capitales !'; }
-  else if (ratio >= 0.75){ badge = '🥇'; msg = 'Excellent travail, presque tout juste !'; }
-  else if (ratio >= 0.5){ badge = '🥈'; msg = 'Bien joué, tu progresses bien !'; }
-  document.getElementById('resultBadge').textContent = badge;
-  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultBadge').textContent = tr().resultBadge(ratio);
+  document.getElementById('resultMsg').textContent = tr().resultMsg(ratio);
 
   const key = STORAGE_KEY + level;
   let best = 0;
@@ -252,7 +361,7 @@ function endQuiz(){
     best = score;
     try { localStorage.setItem(key, String(best)); } catch(e){}
   }
-  document.getElementById('resultBest').textContent = 'Meilleur score (niveau ' + level + ') : ' + best + ' / ' + total;
+  document.getElementById('resultBest').textContent = tr().bestPrefix(tr().levelLabel[level], best, total);
 }
 
 document.querySelectorAll('.mode-card').forEach(card => {
@@ -262,6 +371,65 @@ document.getElementById('playAgainBtn').addEventListener('click', () => {
   resultScreen.style.display = 'none';
   modeSelect.style.display = 'block';
 });
+
+function updateStaticText(){
+  document.documentElement.lang = currentLang;
+  document.title = tr().docTitle;
+  document.getElementById('navHome').textContent = tr().navHome;
+  document.getElementById('nav36').textContent = tr().nav36;
+  document.getElementById('nav710').textContent = tr().nav710;
+  document.getElementById('nav1114').textContent = tr().nav1114;
+  document.getElementById('heroTitle').textContent = tr().heroTitle;
+  document.getElementById('heroTagline').textContent = tr().heroTagline;
+  document.getElementById('introText').textContent = tr().introText;
+  document.getElementById('mode1Title').textContent = tr().mode1Title;
+  document.getElementById('mode1Sub').textContent = tr().mode1Sub;
+  document.getElementById('mode2Title').textContent = tr().mode2Title;
+  document.getElementById('mode2Sub').textContent = tr().mode2Sub;
+  document.getElementById('mode3Title').textContent = tr().mode3Title;
+  document.getElementById('mode3Sub').textContent = tr().mode3Sub;
+  document.getElementById('scoreLabel').textContent = tr().scoreLabel;
+  document.getElementById('streakLabel').textContent = tr().streakLabel;
+  document.getElementById('qLabel').textContent = tr().qLabel;
+  document.getElementById('playAgainBtn').textContent = tr().playAgainBtn;
+  document.getElementById('footerText').innerHTML = tr().footer;
+
+  if (quizScreen.style.display !== 'none' && level !== null){
+    modeSelect.style.display = 'block';
+    quizScreen.style.display = 'none';
+    resultScreen.style.display = 'none';
+    clearInterval(timerHandle);
+  } else if (resultScreen.style.display !== 'none' && level !== null){
+    const ratio = score / questions.length;
+    document.getElementById('resultBadge').textContent = tr().resultBadge(ratio);
+    document.getElementById('resultMsg').textContent = tr().resultMsg(ratio);
+    const key = STORAGE_KEY + level;
+    let best = 0;
+    try { best = parseInt(localStorage.getItem(key) || '0', 10); } catch(e){ best = 0; }
+    document.getElementById('resultBest').textContent = tr().bestPrefix(tr().levelLabel[level], best, questions.length);
+  }
+}
+
+(function(){
+  const container = document.getElementById('langSwitcher');
+  const langs = ['fr','en','es','de','it'];
+  langs.forEach(lang => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn' + (lang === currentLang ? ' active' : '');
+    btn.dataset.lang = lang;
+    btn.textContent = lang.toUpperCase();
+    btn.addEventListener('click', () => {
+      currentLang = lang;
+      localStorage.setItem('geoGameLang', lang);
+      container.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateStaticText();
+    });
+    container.appendChild(btn);
+  });
+})();
+
+updateStaticText();
 </script>
 
 </body>

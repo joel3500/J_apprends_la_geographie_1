@@ -21,6 +21,7 @@
   "inLanguage": ["fr"],
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CAD" },
+  "inLanguage": ["fr","en","es","de","it"],
   "author": { "@type": "Person", "name": "Joel Sandé" }
 }
 </script>
@@ -28,15 +29,16 @@
 <body>
 
 <nav class="page-nav" aria-label="Choisir une tranche d'âge">
-  <a href="index.html" aria-current="page">🏠 Accueil</a>
-  <a href="geo_3_6.html">🐣 3-6 ans</a>
-  <a href="geo_7_10.html">🧭 7-10 ans</a>
-  <a href="geo_11_14.html">🌐 11-14 ans</a>
+  <a href="index.html" aria-current="page" id="navHome">🏠 Accueil</a>
+  <a href="geo_3_6.html" id="nav36">🐣 3-6 ans</a>
+  <a href="geo_7_10.html" id="nav710">🧭 7-10 ans</a>
+  <a href="geo_11_14.html" id="nav1114">🌐 11-14 ans</a>
 </nav>
+<div id="langSwitcher"></div>
 
 <header class="hero">
-  <h1>🌍 J'explore le monde</h1>
-  <p class="tagline">Trois jeux éducatifs de géographie, gratuits, adaptés à chaque âge. Choisis ton aventure !</p>
+  <h1 id="heroTitle">🌍 J'explore le monde</h1>
+  <p class="tagline" id="heroTagline">Trois jeux éducatifs de géographie, gratuits, adaptés à chaque âge. Choisis ton aventure !</p>
 </header>
 
 <main>
@@ -44,31 +46,149 @@
 
     <a class="age-card" href="geo_3_6.html">
       <span class="a-emoji">🐣</span>
-      <span class="a-age">3-6 ans</span>
-      <h2>Les amis des continents</h2>
-      <p>Clique sur chaque continent coloré pour découvrir son nom et l'animal qui y vit. Lecture à voix haute et confettis à la clé !</p>
+      <span class="a-age" id="card1Age">3-6 ans</span>
+      <h2 id="card1Title">Les amis des continents</h2>
+      <p id="card1Desc">Clique sur chaque continent coloré pour découvrir son nom et l'animal qui y vit. Lecture à voix haute et confettis à la clé !</p>
     </a>
 
     <a class="age-card" href="geo_7_10.html">
       <span class="a-emoji">🧭</span>
-      <span class="a-age">7-10 ans</span>
-      <h2>Le jeu des capitales</h2>
-      <p>Un quiz à choix multiples sur les pays et leurs capitales, avec 3 niveaux de difficulté, un score et une série de bonnes réponses.</p>
+      <span class="a-age" id="card2Age">7-10 ans</span>
+      <h2 id="card2Title">Le jeu des capitales</h2>
+      <p id="card2Desc">Un quiz à choix multiples sur les pays et leurs capitales, avec 3 niveaux de difficulté, un score et une série de bonnes réponses.</p>
     </a>
 
     <a class="age-card" href="geo_11_14.html">
       <span class="a-emoji">🌐</span>
-      <span class="a-age">11-14 ans</span>
-      <h2>Défi géo mondial</h2>
-      <p>Capitales, vrai ou faux et monuments célèbres : un défi complet avec badges, meilleur score sauvegardé et explications pour chaque réponse.</p>
+      <span class="a-age" id="card3Age">11-14 ans</span>
+      <h2 id="card3Title">Défi géo mondial</h2>
+      <p id="card3Desc">Capitales, vrai ou faux et monuments célèbres : un défi complet avec badges, meilleur score sauvegardé et explications pour chaque réponse.</p>
     </a>
 
   </div>
 </main>
 
 <footer>
-  <p>&copy; J'explore le monde — à but éducatif. Maternelle, primaire, secondaire.<br>Merci de partager ces jeux gratuitement !</p>
+  <p id="footerText">&copy; J'explore le monde — à but éducatif. Maternelle, primaire, secondaire.<br>
+    Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean) <br>
+    Merci de partager ces jeux gratuitement !
+  </p>
 </footer>
+
+<script>
+const I18N = {
+  fr:{
+    docTitle:"J'explore le monde — jeux éducatifs de géographie (3 à 14 ans)",
+    navHome:"🏠 Accueil", nav36:"🐣 3-6 ans", nav710:"🧭 7-10 ans", nav1114:"🌐 11-14 ans",
+    heroTitle:"🌍 J'explore le monde",
+    heroTagline:"Trois jeux éducatifs de géographie, gratuits, adaptés à chaque âge. Choisis ton aventure !",
+    card1Age:"3-6 ans", card1Title:"Les amis des continents",
+    card1Desc:"Clique sur chaque continent coloré pour découvrir son nom et l'animal qui y vit. Lecture à voix haute et confettis à la clé !",
+    card2Age:"7-10 ans", card2Title:"Le jeu des capitales",
+    card2Desc:"Un quiz à choix multiples sur les pays et leurs capitales, avec 3 niveaux de difficulté, un score et une série de bonnes réponses.",
+    card3Age:"11-14 ans", card3Title:"Défi géo mondial",
+    card3Desc:"Capitales, vrai ou faux et monuments célèbres : un défi complet avec badges, meilleur score sauvegardé et explications pour chaque réponse.",
+    footer:"&copy; J'explore le monde — à but éducatif. Maternelle, primaire, secondaire.<br>Tous droits réservés, et Copie Interdite (créé par Joel Sandé, Saguenay lac Saint-Jean)<br>Merci de partager ces jeux gratuitement !"
+  },
+  en:{
+    docTitle:"I Explore the World — geography learning games (ages 3 to 14)",
+    navHome:"🏠 Home", nav36:"🐣 3-6 yrs", nav710:"🧭 7-10 yrs", nav1114:"🌐 11-14 yrs",
+    heroTitle:"🌍 I Explore the World",
+    heroTagline:"Three free geography learning games, adapted to every age. Choose your adventure!",
+    card1Age:"3-6 yrs", card1Title:"Friends of the continents",
+    card1Desc:"Click each colorful continent to discover its name and the animal who lives there. Read-aloud and confetti included!",
+    card2Age:"7-10 yrs", card2Title:"The capitals game",
+    card2Desc:"A multiple-choice quiz on countries and their capitals, with 3 difficulty levels, a score and a winning streak.",
+    card3Age:"11-14 yrs", card3Title:"World geo challenge",
+    card3Desc:"Capitals, true or false and famous landmarks: a complete challenge with badges, saved best score and an explanation for every answer.",
+    footer:"&copy; I Explore the World — for educational purposes. Preschool, elementary, middle school.<br>All rights reserved, copying strictly forbidden (created by Joel Sandé, Saguenay lac Saint-Jean)<br>Thank you for sharing these games widely!"
+  },
+  es:{
+    docTitle:"Exploro el mundo — juegos educativos de geografía (3 a 14 años)",
+    navHome:"🏠 Inicio", nav36:"🐣 3-6 años", nav710:"🧭 7-10 años", nav1114:"🌐 11-14 años",
+    heroTitle:"🌍 Exploro el mundo",
+    heroTagline:"Tres juegos educativos de geografía, gratuitos, adaptados a cada edad. ¡Elige tu aventura!",
+    card1Age:"3-6 años", card1Title:"Los amigos de los continentes",
+    card1Desc:"Haz clic en cada continente de color para descubrir su nombre y el animal que vive allí. ¡Lectura en voz alta y confeti incluidos!",
+    card2Age:"7-10 años", card2Title:"El juego de las capitales",
+    card2Desc:"Un cuestionario de opción múltiple sobre los países y sus capitales, con 3 niveles de dificultad, una puntuación y una racha de aciertos.",
+    card3Age:"11-14 años", card3Title:"Desafío geo mundial",
+    card3Desc:"Capitales, verdadero o falso y monumentos famosos: un desafío completo con insignias, mejor puntuación guardada y explicación de cada respuesta.",
+    footer:"&copy; Exploro el mundo — con fines educativos. Preescolar, primaria, secundaria.<br>Todos los derechos reservados, copia estrictamente prohibida (creado por Joel Sandé, Saguenay lac Saint-Jean)<br>¡Gracias por compartir estos juegos gratuitamente!"
+  },
+  de:{
+    docTitle:"Ich entdecke die Welt — Geografie-Lernspiele (3 bis 14 Jahre)",
+    navHome:"🏠 Start", nav36:"🐣 3-6 Jahre", nav710:"🧭 7-10 Jahre", nav1114:"🌐 11-14 Jahre",
+    heroTitle:"🌍 Ich entdecke die Welt",
+    heroTagline:"Drei kostenlose Geografie-Lernspiele, passend für jedes Alter. Wähle dein Abenteuer!",
+    card1Age:"3-6 Jahre", card1Title:"Die Freunde der Kontinente",
+    card1Desc:"Klicke auf jeden bunten Kontinent, um seinen Namen und das dort lebende Tier zu entdecken. Mit Vorlesefunktion und Konfetti!",
+    card2Age:"7-10 Jahre", card2Title:"Das Hauptstädte-Spiel",
+    card2Desc:"Ein Multiple-Choice-Quiz über Länder und ihre Hauptstädte, mit 3 Schwierigkeitsstufen, einer Punktzahl und einer Erfolgsserie.",
+    card3Age:"11-14 Jahre", card3Title:"Welt-Geo-Herausforderung",
+    card3Desc:"Hauptstädte, Wahr oder Falsch und berühmte Bauwerke: eine komplette Herausforderung mit Abzeichen, gespeichertem Bestwert und Erklärung zu jeder Antwort.",
+    footer:"&copy; Ich entdecke die Welt — zu Lernzwecken. Kindergarten, Grundschule, Sekundarstufe.<br>Alle Rechte vorbehalten, Kopieren strengstens untersagt (erstellt von Joel Sandé, Saguenay lac Saint-Jean)<br>Danke, dass ihr diese Spiele fleißig teilt!"
+  },
+  it:{
+    docTitle:"Esploro il mondo — giochi educativi di geografia (3-14 anni)",
+    navHome:"🏠 Home", nav36:"🐣 3-6 anni", nav710:"🧭 7-10 anni", nav1114:"🌐 11-14 anni",
+    heroTitle:"🌍 Esploro il mondo",
+    heroTagline:"Tre giochi educativi di geografia, gratuiti, adatti a ogni età. Scegli la tua avventura!",
+    card1Age:"3-6 anni", card1Title:"Gli amici dei continenti",
+    card1Desc:"Clicca su ogni continente colorato per scoprire il suo nome e l'animale che ci vive. Lettura ad alta voce e coriandoli inclusi!",
+    card2Age:"7-10 anni", card2Title:"Il gioco delle capitali",
+    card2Desc:"Un quiz a scelta multipla su paesi e capitali, con 3 livelli di difficoltà, un punteggio e una serie di risposte corrette.",
+    card3Age:"11-14 anni", card3Title:"Sfida geo mondiale",
+    card3Desc:"Capitali, vero o falso e monumenti famosi: una sfida completa con distintivi, miglior punteggio salvato e spiegazione per ogni risposta.",
+    footer:"&copy; Esploro il mondo — a scopo educativo. Scuola materna, primaria, secondaria.<br>Tutti i diritti riservati, copia rigorosamente vietata (creato da Joel Sandé, Saguenay lac Saint-Jean)<br>Grazie di condividere questi giochi gratuitamente!"
+  }
+};
+
+let currentLang = localStorage.getItem('geoGameLang') || 'fr';
+function tr(){ return I18N[currentLang]; }
+
+function updateStaticText(){
+  document.documentElement.lang = currentLang;
+  document.title = tr().docTitle;
+  document.getElementById('navHome').textContent = tr().navHome;
+  document.getElementById('nav36').textContent = tr().nav36;
+  document.getElementById('nav710').textContent = tr().nav710;
+  document.getElementById('nav1114').textContent = tr().nav1114;
+  document.getElementById('heroTitle').textContent = tr().heroTitle;
+  document.getElementById('heroTagline').textContent = tr().heroTagline;
+  document.getElementById('card1Age').textContent = tr().card1Age;
+  document.getElementById('card1Title').textContent = tr().card1Title;
+  document.getElementById('card1Desc').textContent = tr().card1Desc;
+  document.getElementById('card2Age').textContent = tr().card2Age;
+  document.getElementById('card2Title').textContent = tr().card2Title;
+  document.getElementById('card2Desc').textContent = tr().card2Desc;
+  document.getElementById('card3Age').textContent = tr().card3Age;
+  document.getElementById('card3Title').textContent = tr().card3Title;
+  document.getElementById('card3Desc').textContent = tr().card3Desc;
+  document.getElementById('footerText').innerHTML = tr().footer;
+}
+
+(function(){
+  const container = document.getElementById('langSwitcher');
+  const langs = ['fr','en','es','de','it'];
+  langs.forEach(lang => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn' + (lang === currentLang ? ' active' : '');
+    btn.dataset.lang = lang;
+    btn.textContent = lang.toUpperCase();
+    btn.addEventListener('click', () => {
+      currentLang = lang;
+      localStorage.setItem('geoGameLang', lang);
+      container.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateStaticText();
+    });
+    container.appendChild(btn);
+  });
+})();
+
+updateStaticText();
+</script>
 
 </body>
 </html>

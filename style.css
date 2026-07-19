@@ -53,6 +53,31 @@ body{
   color:#fff;
 }
 
+/* sélecteur de langue (FR/EN/ES/DE/IT) */
+#langSwitcher{
+  display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center;
+  padding:10px 12px 0;
+  width:100%;
+}
+.lang-btn{
+  color:#1b3a5c;
+  font-family:inherit;
+  font-size:.8rem;
+  font-weight:700;
+  padding:.35em .9em;
+  border:none;
+  border-radius:999px;
+  background:rgba(255,255,255,.6);
+  box-shadow:var(--shadow-soft);
+  cursor:pointer;
+  transition:background .15s ease, transform .15s ease;
+}
+.lang-btn:hover{ background:#fff; transform:translateY(-1px); }
+.lang-btn.active{
+  background:linear-gradient(135deg,#F2A65A,#e0883a);
+  color:#fff;
+}
+
 header.hero{
   width:100%;
   text-align:center;
